@@ -2,10 +2,167 @@
 <html lang="ja">
 <head>
   <meta charset="UTF-8">
-  <title>My First Site</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>MY WHITE</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: "Helvetica Neue", Arial, sans-serif;
+      color: #222;
+      background: #fff;
+      letter-spacing: 0.04em;
+    }
+
+    header {
+      padding: 28px 48px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #eee;
+    }
+
+    .logo {
+      font-size: 28px;
+      font-weight: 600;
+      letter-spacing: 0.16em;
+    }
+
+    nav a {
+      margin-left: 28px;
+      text-decoration: none;
+      color: #333;
+      font-size: 14px;
+    }
+
+    .hero {
+      padding: 120px 40px;
+      text-align: center;
+      background: #f7f6f2;
+    }
+
+    .hero h1 {
+      font-size: 42px;
+      font-weight: 400;
+      margin-bottom: 20px;
+    }
+
+    .hero p {
+      font-size: 15px;
+      line-height: 2;
+    }
+
+    .section {
+      padding: 70px 48px;
+    }
+
+    .section h2 {
+      font-size: 22px;
+      font-weight: 400;
+      margin-bottom: 36px;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 32px;
+    }
+
+    .card {
+      background: #fafafa;
+      padding: 32px;
+      text-align: center;
+    }
+
+    .image {
+      height: 220px;
+      background: #eee9df;
+      margin-bottom: 24px;
+    }
+
+    .card h3 {
+      font-size: 16px;
+      font-weight: 400;
+    }
+
+    .card p {
+      font-size: 13px;
+      color: #666;
+    }
+
+    footer {
+      padding: 40px;
+      text-align: center;
+      font-size: 12px;
+      color: #777;
+      border-top: 1px solid #eee;
+    }
+
+    @media (max-width: 700px) {
+      header {
+        padding: 24px;
+        display: block;
+      }
+
+      nav {
+        margin-top: 16px;
+      }
+
+      nav a {
+        margin: 0 16px 0 0;
+      }
+
+      .products {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
 </head>
 <body>
-  <h1>こんにちは！</h1>
-  <p>これは私の初めてのウェブサイトです。</p>
+
+  <header>
+    <div class="logo">MY WHITE</div>
+    <nav>
+      <a href="#">NEW</a>
+      <a href="#">GIFT</a>
+      <a href="#">ABOUT</a>
+    </nav>
+  </header>
+
+  <section class="hero">
+    <h1>日々に、やさしい余白を。</h1>
+    <p>
+      香り、ことば、暮らし。<br>
+      静かに整う時間を届ける小さなサイトです。
+    </p>
+  </section>
+
+  <section class="section">
+    <h2>ITEMS</h2>
+
+    <div class="products">
+      <div class="card">
+        <div class="image"></div>
+        <h3>White Note</h3>
+        <p>やわらかな香りのような文章</p>
+      </div>
+
+      <div class="card">
+        <div class="image"></div>
+        <h3>Calm Care</h3>
+        <p>医療・美容に寄り添うコンテンツ</p>
+      </div>
+
+      <div class="card">
+        <div class="image"></div>
+        <h3>Simple Gift</h3>
+        <p>読みやすく、伝わる言葉</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    © 2026 MY WHITE
+  </footer>
+
 </body>
 </html>
