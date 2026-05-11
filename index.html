@@ -3,821 +3,1047 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SHIRO 公式オンラインストア</title>
+  <title>My World — 私の好きなこと</title>
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&family=Noto+Serif+JP:wght@300;400&family=Noto+Sans+JP:wght@300;400&display=swap" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400;1,600&family=Noto+Serif+JP:wght@300;400;600&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
     :root {
-      --cream: #f7f4ef;
-      --warm-white: #fdfcfa;
-      --stone: #d4cfc8;
-      --ash: #9e9890;
-      --charcoal: #3a3733;
-      --ink: #1c1a18;
-      --sage: #8a9e8c;
-      --blush: #d9b8a8;
-      --font-display: 'Cormorant Garamond', serif;
+      --bg: #0e0d0b;
+      --bg2: #141310;
+      --surface: #1a1815;
+      --border: rgba(255,255,255,0.08);
+      --gold: #c9a84c;
+      --gold-light: #e8cc80;
+      --cream: #f0ead8;
+      --text: #d8d2c4;
+      --muted: #7a7468;
+      --accent-blue: #7bb3d4;
+      --accent-sage: #8aab8c;
+      --accent-blush: #c4907c;
+      --accent-plum: #9b7eb8;
+      --font-display: 'Playfair Display', serif;
       --font-ja: 'Noto Serif JP', serif;
-      --font-body: 'Noto Sans JP', sans-serif;
+      --font-body: 'DM Sans', sans-serif;
     }
 
     html { scroll-behavior: smooth; }
 
     body {
-      background: var(--warm-white);
-      color: var(--charcoal);
+      background: var(--bg);
+      color: var(--text);
       font-family: var(--font-body);
       font-weight: 300;
-      font-size: 14px;
-      line-height: 1.8;
+      font-size: 15px;
+      line-height: 1.75;
       overflow-x: hidden;
     }
+
+    /* ─── PAGE SYSTEM ─────────────────────────── */
+    .page { display: none; min-height: 100vh; }
+    .page.active { display: block; }
 
     /* ─── HEADER ──────────────────────────────── */
     header {
       position: fixed;
       top: 0; left: 0; right: 0;
-      z-index: 100;
+      z-index: 200;
+      height: 60px;
       display: flex;
       align-items: center;
       justify-content: space-between;
-      padding: 0 48px;
-      height: 64px;
-      background: rgba(253,252,250,0.92);
-      backdrop-filter: blur(12px);
-      border-bottom: 1px solid var(--stone);
-      transition: background 0.3s;
+      padding: 0 40px;
+      background: rgba(14,13,11,0.92);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid var(--border);
     }
 
-    .logo {
+    .site-logo {
       font-family: var(--font-display);
-      font-size: 22px;
-      font-weight: 300;
-      letter-spacing: 0.35em;
-      color: var(--ink);
+      font-size: 18px;
+      font-weight: 400;
+      color: var(--gold);
+      cursor: pointer;
+      letter-spacing: 0.06em;
       text-decoration: none;
-      text-transform: uppercase;
+    }
+
+    .site-logo span {
+      font-style: italic;
+      font-size: 13px;
+      color: var(--muted);
+      margin-left: 10px;
+      font-family: var(--font-ja);
+      font-weight: 300;
     }
 
     nav {
       display: flex;
       align-items: center;
-      gap: 36px;
+      gap: 4px;
     }
 
-    nav a {
-      font-family: var(--font-body);
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      color: var(--charcoal);
-      text-decoration: none;
-      text-transform: uppercase;
-      transition: color 0.2s;
-    }
-    nav a:hover { color: var(--sage); }
-
-    .header-icons {
-      display: flex;
-      align-items: center;
-      gap: 20px;
-    }
-
-    .icon-btn {
+    .nav-btn {
       background: none;
       border: none;
       cursor: pointer;
-      color: var(--charcoal);
-      display: flex;
-      align-items: center;
-      gap: 6px;
-      font-size: 11px;
-      letter-spacing: 0.1em;
-      transition: color 0.2s;
-      padding: 0;
+      color: var(--muted);
       font-family: var(--font-body);
+      font-size: 12px;
+      font-weight: 400;
+      letter-spacing: 0.04em;
+      padding: 6px 14px;
+      border-radius: 20px;
+      transition: color 0.2s, background 0.2s;
+      white-space: nowrap;
     }
-    .icon-btn:hover { color: var(--sage); }
+    .nav-btn:hover { color: var(--cream); background: rgba(255,255,255,0.06); }
+    .nav-btn.active { color: var(--gold); background: rgba(201,168,76,0.12); }
 
-    .cart-count {
-      background: var(--charcoal);
-      color: var(--warm-white);
-      border-radius: 50%;
-      width: 16px;
-      height: 16px;
-      font-size: 9px;
-      display: inline-flex;
-      align-items: center;
-      justify-content: center;
-      margin-left: 2px;
+    .nav-hamburger {
+      display: none;
+      background: none;
+      border: none;
+      cursor: pointer;
+      color: var(--cream);
+      padding: 8px;
     }
 
-    /* ─── HERO ────────────────────────────────── */
-    .hero {
-      margin-top: 64px;
-      height: calc(100vh - 64px);
-      position: relative;
+    /* ─── HERO (HOME) ─────────────────────────── */
+    .home-hero {
+      padding-top: 60px;
+      min-height: 100vh;
       display: grid;
       grid-template-columns: 1fr 1fr;
+      position: relative;
       overflow: hidden;
     }
 
     .hero-left {
-      background: var(--cream);
       display: flex;
       flex-direction: column;
       justify-content: center;
-      padding: 80px 72px;
+      padding: 80px 60px 80px 60px;
       position: relative;
+      z-index: 2;
     }
 
-    .hero-label {
-      font-size: 10px;
+    .hero-eyebrow {
+      font-family: var(--font-body);
+      font-size: 11px;
       letter-spacing: 0.3em;
       text-transform: uppercase;
-      color: var(--ash);
-      margin-bottom: 28px;
-      font-family: var(--font-body);
+      color: var(--gold);
+      margin-bottom: 24px;
     }
 
     .hero-title {
       font-family: var(--font-display);
-      font-size: clamp(52px, 6vw, 88px);
-      font-weight: 300;
-      line-height: 1.1;
-      color: var(--ink);
-      margin-bottom: 12px;
-      letter-spacing: 0.02em;
+      font-size: clamp(48px, 6vw, 86px);
+      font-weight: 400;
+      line-height: 1.08;
+      color: var(--cream);
+      margin-bottom: 8px;
     }
 
     .hero-title em {
       font-style: italic;
-      color: var(--sage);
+      color: var(--gold);
     }
 
-    .hero-subtitle {
+    .hero-ja {
       font-family: var(--font-ja);
-      font-size: 13px;
-      font-weight: 300;
-      color: var(--ash);
-      letter-spacing: 0.12em;
-      margin-bottom: 48px;
-      line-height: 2;
+      font-size: 14px;
+      color: var(--muted);
+      letter-spacing: 0.15em;
+      margin-bottom: 36px;
     }
 
-    .hero-cta {
+    .hero-desc {
+      font-size: 15px;
+      color: var(--text);
+      line-height: 1.9;
+      max-width: 420px;
+      margin-bottom: 48px;
+      font-family: var(--font-ja);
+    }
+
+    .hero-tags {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      margin-bottom: 48px;
+    }
+
+    .hero-tag {
+      padding: 7px 18px;
+      border: 1px solid var(--border);
+      font-size: 12px;
+      color: var(--muted);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: border-color 0.2s, color 0.2s, background 0.2s;
+      font-family: var(--font-body);
+      background: none;
+    }
+    .hero-tag:hover { border-color: var(--gold); color: var(--gold); background: rgba(201,168,76,0.06); }
+
+    .hero-cta-row {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .btn-gold {
       display: inline-flex;
       align-items: center;
-      gap: 16px;
+      gap: 10px;
+      background: var(--gold);
+      color: var(--bg);
+      font-family: var(--font-body);
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.08em;
+      padding: 14px 30px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.2s, transform 0.15s;
       text-decoration: none;
-      color: var(--ink);
-      font-size: 11px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      border-bottom: 1px solid var(--charcoal);
-      padding-bottom: 6px;
-      width: fit-content;
-      transition: gap 0.3s, color 0.2s;
     }
-    .hero-cta:hover { gap: 24px; color: var(--sage); border-color: var(--sage); }
+    .btn-gold:hover { background: var(--gold-light); transform: translateY(-1px); }
 
-    .hero-cta svg { transition: transform 0.3s; }
-    .hero-cta:hover svg { transform: translateX(4px); }
+    .btn-ghost {
+      font-size: 13px;
+      color: var(--muted);
+      text-decoration: none;
+      letter-spacing: 0.06em;
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 2px;
+      cursor: pointer;
+      background: none;
+      border-top: none;
+      border-left: none;
+      border-right: none;
+      font-family: var(--font-body);
+      transition: color 0.2s, border-color 0.2s;
+    }
+    .btn-ghost:hover { color: var(--cream); border-color: var(--cream); }
 
     .hero-right {
       position: relative;
       overflow: hidden;
-      background: var(--stone);
     }
 
-    .hero-right::before {
-      content: '';
+    .hero-mosaic {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      grid-template-rows: 1fr 1fr 1fr;
+      height: 100%;
+      gap: 2px;
+    }
+
+    .mosaic-cell {
+      position: relative;
+      overflow: hidden;
+      cursor: pointer;
+      transition: filter 0.3s;
+    }
+    .mosaic-cell:hover { filter: brightness(1.15); }
+
+    .mosaic-cell img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94);
+    }
+    .mosaic-cell:hover img { transform: scale(1.06); }
+
+    .mosaic-cell .cell-label {
       position: absolute;
-      inset: 0;
-      background: linear-gradient(135deg, #c8d4c8 0%, #b8c4b0 30%, #d4c8bc 60%, #e8ddd4 100%);
+      bottom: 0; left: 0; right: 0;
+      background: linear-gradient(to top, rgba(14,13,11,0.85), transparent);
+      padding: 20px 14px 12px;
+      font-family: var(--font-display);
+      font-size: 13px;
+      color: var(--cream);
+      opacity: 0;
+      transform: translateY(4px);
+      transition: opacity 0.3s, transform 0.3s;
+    }
+    .mosaic-cell:hover .cell-label { opacity: 1; transform: translateY(0); }
+
+    .mosaic-cell.span2 { grid-column: span 2; }
+
+    /* ─── HOBBY CARDS (HOME) ──────────────────── */
+    .hobby-grid-section {
+      padding: 100px 60px;
+      background: var(--bg2);
     }
 
-    /* Abstract botanical art */
-    .hero-art {
-      position: absolute;
-      inset: 0;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+    .section-label {
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--gold);
+      margin-bottom: 16px;
     }
 
-    .hero-art svg {
-      width: 80%;
-      height: 80%;
-      opacity: 0.6;
-      animation: float 8s ease-in-out infinite;
-    }
-
-    @keyframes float {
-      0%, 100% { transform: translateY(0) rotate(0deg); }
-      50% { transform: translateY(-12px) rotate(1deg); }
-    }
-
-    .hero-product-tag {
-      position: absolute;
-      bottom: 48px;
-      right: 48px;
-      background: rgba(253,252,250,0.9);
-      padding: 20px 24px;
-      font-size: 11px;
-      letter-spacing: 0.1em;
-    }
-    .hero-product-tag .name { font-family: var(--font-display); font-size: 18px; display: block; margin-bottom: 4px; }
-    .hero-product-tag .price { color: var(--ash); }
-
-    /* ─── SECTION COMMONS ─────────────────────── */
-    section { padding: 100px 48px; }
-
-    .section-header {
-      display: flex;
-      align-items: baseline;
-      justify-content: space-between;
+    .section-heading {
+      font-family: var(--font-display);
+      font-size: clamp(28px, 4vw, 48px);
+      font-weight: 400;
+      color: var(--cream);
       margin-bottom: 56px;
     }
 
-    .section-title {
-      font-family: var(--font-display);
-      font-size: clamp(32px, 4vw, 52px);
-      font-weight: 300;
-      letter-spacing: 0.04em;
-      color: var(--ink);
-    }
+    .section-heading em { font-style: italic; color: var(--gold); }
 
-    .section-link {
-      font-size: 11px;
-      letter-spacing: 0.18em;
-      text-transform: uppercase;
-      color: var(--ash);
-      text-decoration: none;
-      border-bottom: 1px solid var(--stone);
-      padding-bottom: 3px;
-      transition: color 0.2s, border-color 0.2s;
-    }
-    .section-link:hover { color: var(--charcoal); border-color: var(--charcoal); }
-
-    /* ─── CATEGORY STRIP ──────────────────────── */
-    .categories {
-      background: var(--ink);
-      padding: 0;
-      overflow: hidden;
-    }
-
-    .category-scroll {
-      display: flex;
-      overflow-x: auto;
-      scrollbar-width: none;
-      gap: 1px;
-    }
-    .category-scroll::-webkit-scrollbar { display: none; }
-
-    .category-item {
-      flex: 0 0 auto;
-      padding: 20px 36px;
-      text-align: center;
-      color: var(--stone);
-      cursor: pointer;
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      transition: background 0.2s, color 0.2s;
-      white-space: nowrap;
-      font-family: var(--font-body);
-      border: none;
-      background: none;
-    }
-    .category-item:hover, .category-item.active {
-      background: rgba(255,255,255,0.08);
-      color: var(--warm-white);
-    }
-    .category-item.active { color: var(--blush); }
-
-    .category-ja {
-      display: block;
-      font-family: var(--font-ja);
-      font-size: 10px;
-      letter-spacing: 0.05em;
-      margin-top: 3px;
-      opacity: 0.6;
-      text-transform: none;
-    }
-
-    /* ─── PRODUCTS GRID ───────────────────────── */
-    .products { background: var(--warm-white); }
-
-    .product-grid {
+    .hobby-cards {
       display: grid;
       grid-template-columns: repeat(4, 1fr);
       gap: 2px;
     }
 
-    .product-card {
-      background: var(--warm-white);
+    .hobby-card {
+      position: relative;
+      overflow: hidden;
       cursor: pointer;
-      position: relative;
-      overflow: hidden;
-      group: true;
-    }
-
-    .product-image {
       aspect-ratio: 3/4;
-      background: var(--cream);
-      position: relative;
-      overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      background: var(--surface);
     }
 
-    .product-image svg {
-      width: 55%;
-      height: 55%;
-      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    .hobby-card img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.6s cubic-bezier(0.25,0.46,0.45,0.94), filter 0.4s;
+      filter: brightness(0.7) saturate(0.8);
     }
+    .hobby-card:hover img { transform: scale(1.08); filter: brightness(0.85) saturate(1); }
 
-    .product-card:hover .product-image svg { transform: scale(1.06) translateY(-4px); }
-
-    .product-image::after {
-      content: '';
+    .hobby-card-overlay {
       position: absolute;
       inset: 0;
-      background: linear-gradient(to top, rgba(58,55,51,0.12) 0%, transparent 60%);
-      opacity: 0;
-      transition: opacity 0.4s;
-    }
-    .product-card:hover .product-image::after { opacity: 1; }
-
-    .product-badge {
-      position: absolute;
-      top: 16px;
-      left: 16px;
-      font-size: 9px;
-      letter-spacing: 0.15em;
-      text-transform: uppercase;
-      padding: 4px 10px;
-      background: var(--ink);
-      color: var(--cream);
-    }
-
-    .product-badge.new { background: var(--sage); }
-    .product-badge.limited { background: var(--blush); color: var(--ink); }
-
-    .product-add {
-      position: absolute;
-      bottom: 16px;
-      right: 16px;
-      width: 36px;
-      height: 36px;
-      background: var(--warm-white);
-      border: none;
-      cursor: pointer;
+      background: linear-gradient(to top, rgba(14,13,11,0.9) 0%, rgba(14,13,11,0.2) 50%, transparent 100%);
       display: flex;
-      align-items: center;
-      justify-content: center;
-      opacity: 0;
-      transform: translateY(8px);
-      transition: opacity 0.3s, transform 0.3s;
-    }
-    .product-card:hover .product-add { opacity: 1; transform: translateY(0); }
-    .product-add:hover { background: var(--ink); color: var(--warm-white); }
-    .product-add svg { pointer-events: none; }
-
-    .product-info {
-      padding: 20px 20px 28px;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 24px 20px;
+      transition: background 0.3s;
     }
 
-    .product-scent {
-      font-size: 9px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--sage);
-      margin-bottom: 6px;
+    .hobby-card-icon {
+      font-size: 22px;
+      margin-bottom: 8px;
+      transition: transform 0.3s;
     }
+    .hobby-card:hover .hobby-card-icon { transform: scale(1.2); }
 
-    .product-name {
+    .hobby-card-name {
       font-family: var(--font-display);
       font-size: 18px;
-      font-weight: 400;
-      color: var(--ink);
+      color: var(--cream);
       margin-bottom: 4px;
     }
 
-    .product-name-ja {
+    .hobby-card-ja {
       font-family: var(--font-ja);
       font-size: 11px;
-      color: var(--ash);
+      color: var(--muted);
       margin-bottom: 12px;
     }
 
-    .product-price {
-      font-size: 13px;
-      color: var(--charcoal);
-      letter-spacing: 0.05em;
+    .hobby-card-arrow {
+      font-size: 16px;
+      color: var(--gold);
+      opacity: 0;
+      transform: translateX(-8px);
+      transition: opacity 0.3s, transform 0.3s;
     }
-    .product-price span { color: var(--ash); font-size: 11px; margin-left: 4px; }
+    .hobby-card:hover .hobby-card-arrow { opacity: 1; transform: translateX(0); }
 
-    /* ─── BANNER ──────────────────────────────── */
-    .banner {
-      padding: 0;
+    /* ─── ENGLISH LESSON CTA (HOME) ──────────────────── */
+    .english-home-cta {
+      background: linear-gradient(135deg, #0d1a24 0%, #0e1820 50%, #131a0e 100%);
+      padding: 100px 60px;
       display: grid;
       grid-template-columns: 1fr 1fr;
-      min-height: 560px;
-    }
-
-    .banner-visual {
-      background: linear-gradient(135deg, #c8d9c0 0%, #a8c4b0 50%, #90b09a 100%);
+      gap: 80px;
+      align-items: center;
       position: relative;
       overflow: hidden;
-      display: flex;
-      align-items: center;
-      justify-content: center;
     }
 
-    .banner-visual svg {
-      width: 60%;
-      opacity: 0.5;
-      animation: float 10s ease-in-out infinite reverse;
-    }
-
-    .banner-content {
-      background: var(--cream);
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      padding: 80px 72px;
-    }
-
-    .banner-eyebrow {
-      font-size: 10px;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--sage);
-      margin-bottom: 24px;
-    }
-
-    .banner-title {
+    .english-home-cta::before {
+      content: 'ENGLISH';
+      position: absolute;
+      right: -40px;
+      top: 50%;
+      transform: translateY(-50%) rotate(90deg);
       font-family: var(--font-display);
-      font-size: clamp(36px, 4vw, 64px);
-      font-weight: 300;
-      color: var(--ink);
+      font-size: 140px;
+      color: rgba(255,255,255,0.02);
+      white-space: nowrap;
+      pointer-events: none;
+      letter-spacing: 0.1em;
+    }
+
+    .english-home-left .section-label { color: var(--accent-blue); }
+
+    .english-home-left h2 {
+      font-family: var(--font-display);
+      font-size: clamp(32px, 4vw, 56px);
+      font-weight: 400;
+      color: var(--cream);
       line-height: 1.15;
       margin-bottom: 24px;
     }
 
-    .banner-desc {
+    .english-home-left p {
       font-family: var(--font-ja);
-      font-size: 13px;
-      color: var(--ash);
-      line-height: 2.2;
-      margin-bottom: 40px;
-      max-width: 380px;
+      font-size: 14px;
+      color: var(--text);
+      line-height: 2.1;
+      margin-bottom: 36px;
     }
 
-    .btn-outline {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      border: 1px solid var(--charcoal);
-      padding: 14px 28px;
-      font-size: 11px;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--ink);
-      text-decoration: none;
-      width: fit-content;
-      transition: background 0.25s, color 0.25s;
-    }
-    .btn-outline:hover { background: var(--ink); color: var(--cream); }
-
-    /* ─── SCENT FINDER ────────────────────────── */
-    .scent-finder {
-      background: var(--ink);
-      color: var(--cream);
-      text-align: center;
-      padding: 100px 48px;
-    }
-
-    .scent-finder .section-title { color: var(--cream); margin-bottom: 16px; }
-
-    .scent-subtitle {
-      font-family: var(--font-ja);
-      font-size: 13px;
-      color: var(--ash);
-      letter-spacing: 0.1em;
-      margin-bottom: 56px;
-    }
-
-    .scent-grid {
-      display: grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 2px;
-      max-width: 900px;
-      margin: 0 auto 56px;
-    }
-
-    .scent-chip {
-      background: rgba(255,255,255,0.06);
-      border: 1px solid rgba(255,255,255,0.1);
-      padding: 28px 16px;
-      cursor: pointer;
-      transition: background 0.25s, border-color 0.25s;
-      text-align: center;
-    }
-    .scent-chip:hover {
-      background: rgba(255,255,255,0.12);
-      border-color: rgba(255,255,255,0.3);
-    }
-
-    .scent-chip-icon { font-size: 28px; margin-bottom: 10px; display: block; }
-    .scent-chip-name {
-      font-family: var(--font-display);
-      font-size: 16px;
-      display: block;
-      margin-bottom: 4px;
-    }
-    .scent-chip-ja {
-      font-family: var(--font-ja);
-      font-size: 10px;
-      color: var(--ash);
-      display: block;
-    }
-
-    .btn-sage {
-      display: inline-flex;
-      align-items: center;
-      gap: 12px;
-      background: var(--sage);
-      color: var(--warm-white);
-      padding: 16px 36px;
-      font-size: 11px;
-      letter-spacing: 0.22em;
-      text-transform: uppercase;
-      text-decoration: none;
-      border: none;
-      cursor: pointer;
-      transition: opacity 0.2s;
-    }
-    .btn-sage:hover { opacity: 0.88; }
-
-    /* ─── EDITORIAL STRIP ─────────────────────── */
-    .editorial {
-      background: var(--cream);
-      padding: 100px 48px;
-    }
-
-    .editorial-grid {
-      display: grid;
-      grid-template-columns: 1.6fr 1fr 1fr;
-      gap: 2px;
-    }
-
-    .editorial-card {
-      position: relative;
-      overflow: hidden;
-      cursor: pointer;
-    }
-
-    .editorial-image {
-      aspect-ratio: 3/4;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
-    }
-
-    .editorial-card:hover .editorial-image { transform: scale(1.04); }
-
-    .editorial-image.sage-bg { background: linear-gradient(160deg, #a8c0aa, #8a9e8c); }
-    .editorial-image.blush-bg { background: linear-gradient(160deg, #d9b8a8, #c4a090); }
-    .editorial-image.stone-bg { background: linear-gradient(160deg, #c8c4bc, #b4b0a8); }
-
-    .editorial-image svg { width: 50%; opacity: 0.7; }
-
-    .editorial-caption {
-      padding: 20px 0 0;
-    }
-    .editorial-tag {
-      font-size: 9px;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--sage);
-      margin-bottom: 8px;
-    }
-    .editorial-title {
-      font-family: var(--font-display);
-      font-size: 20px;
-      font-weight: 400;
-      color: var(--ink);
-      line-height: 1.3;
-    }
-
-    /* ─── MEMBERSHIP ──────────────────────────── */
-    .membership {
-      background: var(--warm-white);
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 0;
-      padding: 0;
-      min-height: 400px;
-    }
-
-    .membership-content {
-      padding: 80px 72px;
+    .english-home-right {
       display: flex;
       flex-direction: column;
-      justify-content: center;
+      gap: 20px;
     }
 
-    .membership h2 {
+    .feature-item {
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      padding: 20px;
+      background: rgba(255,255,255,0.03);
+      border: 1px solid var(--border);
+      border-left: 3px solid var(--accent-blue);
+    }
+
+    .feature-icon { font-size: 22px; flex-shrink: 0; }
+
+    .feature-text h4 {
       font-family: var(--font-display);
-      font-size: 42px;
-      font-weight: 300;
-      color: var(--ink);
+      font-size: 16px;
+      color: var(--cream);
+      margin-bottom: 4px;
+    }
+
+    .feature-text p {
+      font-family: var(--font-ja);
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.7;
+    }
+
+    /* ─── INNER PAGE ──────────────────────────── */
+    .page-header {
+      padding-top: 60px;
+      height: 70vh;
+      min-height: 480px;
+      position: relative;
+      overflow: hidden;
+      display: flex;
+      align-items: flex-end;
+    }
+
+    .page-header-bg {
+      position: absolute;
+      inset: 0;
+    }
+
+    .page-header-bg img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      filter: brightness(0.45) saturate(0.7);
+    }
+
+    .page-header-overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to top, rgba(14,13,11,1) 0%, rgba(14,13,11,0.3) 60%, transparent 100%);
+    }
+
+    .page-header-content {
+      position: relative;
+      z-index: 2;
+      padding: 60px;
+      width: 100%;
+    }
+
+    .page-header-content .eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
       margin-bottom: 16px;
     }
 
-    .membership p {
-      font-family: var(--font-ja);
-      font-size: 13px;
-      color: var(--ash);
-      line-height: 2.2;
-      margin-bottom: 36px;
-      max-width: 380px;
+    .page-header-content h1 {
+      font-family: var(--font-display);
+      font-size: clamp(40px, 6vw, 80px);
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.1;
+      margin-bottom: 8px;
     }
 
-    .membership-perks {
-      background: var(--cream);
-      padding: 80px 72px;
+    .page-header-content h1 em { font-style: italic; }
+
+    .page-header-content .subtitle {
+      font-family: var(--font-ja);
+      font-size: 14px;
+      color: rgba(240,234,216,0.6);
+      letter-spacing: 0.12em;
+    }
+
+    /* ─── ARTICLE BODY ────────────────────────── */
+    .article-body {
+      max-width: 860px;
+      margin: 0 auto;
+      padding: 80px 40px;
+    }
+
+    .article-lead {
+      font-family: var(--font-display);
+      font-size: 22px;
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.6;
+      margin-bottom: 40px;
+      font-style: italic;
+    }
+
+    .article-text {
+      font-family: var(--font-ja);
+      font-size: 15px;
+      color: var(--text);
+      line-height: 2.1;
+      margin-bottom: 32px;
+    }
+
+    .article-text strong {
+      color: var(--cream);
+      font-weight: 600;
+    }
+
+    .article-photo {
+      width: 100%;
+      aspect-ratio: 16/9;
+      object-fit: cover;
+      margin: 48px 0;
+      filter: brightness(0.9) saturate(0.85);
+    }
+
+    .article-photo-caption {
+      font-size: 12px;
+      color: var(--muted);
+      text-align: center;
+      margin-top: -40px;
+      margin-bottom: 48px;
+      font-style: italic;
+    }
+
+    .article-divider {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 48px 0;
+    }
+
+    .pull-quote {
+      border-left: 3px solid var(--gold);
+      padding: 20px 32px;
+      margin: 40px 0;
+      background: rgba(201,168,76,0.04);
+    }
+
+    .pull-quote p {
+      font-family: var(--font-display);
+      font-size: 20px;
+      font-style: italic;
+      color: var(--cream);
+      line-height: 1.6;
+    }
+
+    /* Posts grid inside pages */
+    .posts-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      padding: 0 60px 100px;
+      background: var(--bg);
+    }
+
+    .post-card {
+      background: var(--surface);
+      overflow: hidden;
+      cursor: pointer;
+      transition: transform 0.3s;
+    }
+    .post-card:hover { transform: translateY(-4px); }
+
+    .post-card-img {
+      aspect-ratio: 4/3;
+      overflow: hidden;
+    }
+
+    .post-card-img img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      transition: transform 0.5s;
+      filter: brightness(0.8) saturate(0.85);
+    }
+    .post-card:hover .post-card-img img { transform: scale(1.05); }
+
+    .post-card-body {
+      padding: 24px 22px 28px;
+    }
+
+    .post-card-tag {
+      font-size: 10px;
+      letter-spacing: 0.25em;
+      text-transform: uppercase;
+      margin-bottom: 10px;
+    }
+
+    .post-card-title {
+      font-family: var(--font-display);
+      font-size: 18px;
+      color: var(--cream);
+      line-height: 1.4;
+      margin-bottom: 10px;
+    }
+
+    .post-card-desc {
+      font-family: var(--font-ja);
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.8;
+    }
+
+    /* ─── ENGLISH PAGE ────────────────────────── */
+    .english-page { background: var(--bg); }
+
+    .english-hero {
+      padding-top: 60px;
+      min-height: 100vh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      overflow: hidden;
+    }
+
+    .english-hero-left {
+      background: linear-gradient(160deg, #0a1520, #0d1a0a);
       display: flex;
       flex-direction: column;
       justify-content: center;
-      gap: 28px;
+      padding: 80px 60px;
+      position: relative;
     }
 
-    .perk {
-      display: flex;
-      gap: 20px;
-      align-items: flex-start;
+    .english-hero-left::after {
+      content: '';
+      position: absolute;
+      top: 0; bottom: 0; right: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, transparent, var(--accent-blue), transparent);
     }
 
-    .perk-icon {
-      width: 36px;
-      height: 36px;
-      border: 1px solid var(--stone);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      margin-top: 2px;
+    .english-hero-left .eyebrow {
+      font-size: 10px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: var(--accent-blue);
+      margin-bottom: 20px;
     }
 
-    .perk-title {
+    .english-hero-left h1 {
       font-family: var(--font-display);
-      font-size: 17px;
-      color: var(--ink);
+      font-size: clamp(36px, 5vw, 72px);
+      font-weight: 400;
+      color: var(--cream);
+      line-height: 1.12;
+      margin-bottom: 12px;
+    }
+
+    .english-hero-left h1 em { font-style: italic; color: var(--accent-blue); }
+
+    .english-hero-left .subtitle {
+      font-family: var(--font-ja);
+      font-size: 13px;
+      color: var(--muted);
+      letter-spacing: 0.1em;
+      margin-bottom: 40px;
+    }
+
+    .english-hero-left p {
+      font-family: var(--font-ja);
+      font-size: 14px;
+      color: var(--text);
+      line-height: 2.1;
+      margin-bottom: 40px;
+      max-width: 440px;
+    }
+
+    .english-hero-right {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .english-hero-right img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      filter: brightness(0.5) saturate(0.6);
+    }
+
+    .english-hero-right::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, rgba(10,21,32,0.6), transparent 60%);
+    }
+
+    /* Stats row */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+
+    .stat-item {
+      padding: 40px 40px;
+      border-right: 1px solid var(--border);
+      text-align: center;
+    }
+    .stat-item:last-child { border-right: none; }
+
+    .stat-number {
+      font-family: var(--font-display);
+      font-size: 48px;
+      font-weight: 600;
+      color: var(--gold);
+      line-height: 1;
+      margin-bottom: 6px;
+    }
+
+    .stat-label {
+      font-family: var(--font-ja);
+      font-size: 12px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+    }
+
+    /* Course cards */
+    .courses-section {
+      padding: 80px 60px;
+      background: var(--bg2);
+    }
+
+    .course-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2px;
+      margin-top: 56px;
+    }
+
+    .course-card {
+      background: var(--surface);
+      padding: 40px 32px;
+      border-top: 3px solid transparent;
+      transition: border-color 0.3s, transform 0.3s;
+    }
+    .course-card:hover { transform: translateY(-4px); }
+
+    .course-card.blue { border-color: var(--accent-blue); }
+    .course-card.sage { border-color: var(--accent-sage); }
+    .course-card.gold { border-color: var(--gold); }
+
+    .course-icon { font-size: 32px; margin-bottom: 20px; }
+
+    .course-title {
+      font-family: var(--font-display);
+      font-size: 22px;
+      color: var(--cream);
+      margin-bottom: 8px;
+    }
+
+    .course-subtitle {
+      font-family: var(--font-ja);
+      font-size: 12px;
+      color: var(--muted);
+      margin-bottom: 20px;
+    }
+
+    .course-features {
+      list-style: none;
+      margin-bottom: 28px;
+    }
+
+    .course-features li {
+      font-family: var(--font-ja);
+      font-size: 13px;
+      color: var(--text);
+      padding: 8px 0;
+      border-bottom: 1px solid var(--border);
+      display: flex;
+      gap: 10px;
+      align-items: center;
+    }
+    .course-features li::before { content: '✓'; color: var(--accent-blue); font-size: 11px; }
+    .course-card.sage .course-features li::before { color: var(--accent-sage); }
+    .course-card.gold .course-features li::before { color: var(--gold); }
+
+    .course-price {
+      font-family: var(--font-display);
+      font-size: 28px;
+      color: var(--cream);
       margin-bottom: 4px;
     }
 
-    .perk-desc {
-      font-size: 12px;
-      color: var(--ash);
-      letter-spacing: 0.04em;
-      line-height: 1.7;
+    .course-price-note {
+      font-size: 11px;
+      color: var(--muted);
       font-family: var(--font-ja);
+      margin-bottom: 24px;
     }
 
-    /* ─── FOOTER ──────────────────────────────── */
-    footer {
-      background: var(--ink);
-      color: var(--stone);
-      padding: 80px 48px 40px;
-    }
-
-    .footer-top {
+    /* Contact form */
+    .contact-section {
+      padding: 80px 60px;
+      background: var(--bg);
       display: grid;
-      grid-template-columns: 2fr 1fr 1fr 1fr;
-      gap: 60px;
-      margin-bottom: 64px;
-      padding-bottom: 64px;
-      border-bottom: 1px solid rgba(255,255,255,0.1);
+      grid-template-columns: 1fr 1.2fr;
+      gap: 80px;
+      align-items: start;
     }
 
-    .footer-logo {
+    .contact-left h2 {
       font-family: var(--font-display);
-      font-size: 28px;
-      letter-spacing: 0.3em;
+      font-size: 40px;
       color: var(--cream);
-      margin-bottom: 20px;
-      display: block;
+      line-height: 1.2;
+      margin-bottom: 16px;
     }
 
-    .footer-tagline {
+    .contact-left p {
       font-family: var(--font-ja);
-      font-size: 12px;
-      color: var(--ash);
+      font-size: 14px;
+      color: var(--text);
       line-height: 2;
       margin-bottom: 32px;
     }
 
-    .footer-social {
-      display: flex;
-      gap: 16px;
-    }
-
-    .social-link {
-      width: 32px;
-      height: 32px;
-      border: 1px solid rgba(255,255,255,0.2);
+    .contact-info-item {
       display: flex;
       align-items: center;
-      justify-content: center;
-      color: var(--stone);
-      text-decoration: none;
-      transition: border-color 0.2s, color 0.2s;
+      gap: 12px;
+      padding: 14px 0;
+      border-bottom: 1px solid var(--border);
+      font-family: var(--font-ja);
+      font-size: 13px;
+      color: var(--muted);
     }
-    .social-link:hover { border-color: var(--cream); color: var(--cream); }
+    .contact-info-item span { font-size: 18px; }
 
-    .footer-col h4 {
-      font-family: var(--font-body);
-      font-size: 10px;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--cream);
+    .form-group {
       margin-bottom: 20px;
     }
 
-    .footer-col ul { list-style: none; }
-
-    .footer-col li {
-      margin-bottom: 12px;
-    }
-
-    .footer-col a {
-      color: var(--ash);
-      text-decoration: none;
-      font-size: 12px;
-      font-family: var(--font-ja);
-      letter-spacing: 0.04em;
-      transition: color 0.2s;
-    }
-    .footer-col a:hover { color: var(--cream); }
-
-    .footer-bottom {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
+    .form-group label {
+      display: block;
       font-size: 11px;
-      color: var(--ash);
-      letter-spacing: 0.08em;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
       font-family: var(--font-body);
     }
 
-    /* ─── ANIMATIONS ──────────────────────────── */
-    .fade-in {
-      opacity: 0;
-      transform: translateY(24px);
-      transition: opacity 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94), transform 0.8s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+    .form-group input,
+    .form-group select,
+    .form-group textarea {
+      width: 100%;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      color: var(--cream);
+      font-family: var(--font-ja);
+      font-size: 14px;
+      padding: 14px 16px;
+      outline: none;
+      transition: border-color 0.2s;
+      border-radius: 0;
+      -webkit-appearance: none;
     }
 
-    .fade-in.visible {
-      opacity: 1;
-      transform: translateY(0);
+    .form-group input:focus,
+    .form-group select:focus,
+    .form-group textarea:focus {
+      border-color: var(--accent-blue);
     }
+
+    .form-group textarea { height: 120px; resize: vertical; }
+
+    .form-group select option { background: var(--surface); }
+
+    /* ─── ABOUT SECTION ───────────────────────── */
+    .about-section {
+      padding: 80px 60px;
+      display: grid;
+      grid-template-columns: 1fr 1.5fr;
+      gap: 80px;
+      align-items: center;
+      background: var(--bg2);
+    }
+
+    .about-portrait {
+      aspect-ratio: 3/4;
+      background: var(--surface);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .about-portrait-placeholder {
+      width: 100%;
+      height: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 80px;
+      background: linear-gradient(135deg, var(--surface), #1e1c18);
+    }
+
+    .about-portrait::after {
+      content: '';
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      height: 40%;
+      background: linear-gradient(to top, var(--bg2), transparent);
+    }
+
+    .about-text .eyebrow { color: var(--gold); }
+
+    .about-text h2 {
+      font-family: var(--font-display);
+      font-size: 40px;
+      color: var(--cream);
+      margin-bottom: 24px;
+      line-height: 1.2;
+    }
+
+    .about-text p {
+      font-family: var(--font-ja);
+      font-size: 14px;
+      color: var(--text);
+      line-height: 2.2;
+      margin-bottom: 20px;
+    }
+
+    /* ─── FOOTER ──────────────────────────────── */
+    footer {
+      background: #090807;
+      border-top: 1px solid var(--border);
+      padding: 60px 60px 40px;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 60px;
+    }
+
+    footer .footer-logo {
+      font-family: var(--font-display);
+      font-size: 22px;
+      color: var(--gold);
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    footer p {
+      font-family: var(--font-ja);
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.9;
+    }
+
+    .footer-right {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-end;
+      justify-content: space-between;
+    }
+
+    .footer-nav {
+      display: flex;
+      gap: 24px;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+    }
+
+    .footer-nav button {
+      background: none;
+      border: none;
+      color: var(--muted);
+      font-size: 12px;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: color 0.2s;
+    }
+    .footer-nav button:hover { color: var(--cream); }
+
+    .footer-copy {
+      font-size: 11px;
+      color: var(--muted);
+      font-family: var(--font-body);
+      opacity: 0.6;
+    }
+
+    /* ─── ANIMATIONS ──────────────────────────── */
+    .fade-up {
+      opacity: 0;
+      transform: translateY(30px);
+      transition: opacity 0.8s ease, transform 0.8s ease;
+    }
+    .fade-up.in { opacity: 1; transform: translateY(0); }
 
     /* ─── RESPONSIVE ──────────────────────────── */
-    @media (max-width: 1100px) {
-      .product-grid { grid-template-columns: repeat(3, 1fr); }
-    }
-
-    @media (max-width: 900px) {
-      header { padding: 0 24px; }
-      nav { display: none; }
-      section { padding: 64px 24px; }
-      .hero { grid-template-columns: 1fr; }
+    @media (max-width: 1000px) {
+      .home-hero { grid-template-columns: 1fr; }
       .hero-right { display: none; }
-      .hero-left { padding: 48px 24px; }
-      .product-grid { grid-template-columns: repeat(2, 1fr); }
-      .banner { grid-template-columns: 1fr; }
-      .banner-visual { min-height: 280px; }
-      .scent-grid { grid-template-columns: repeat(2, 1fr); }
-      .editorial-grid { grid-template-columns: 1fr; }
-      .membership { grid-template-columns: 1fr; }
-      .footer-top { grid-template-columns: 1fr 1fr; gap: 40px; }
+      .hobby-cards { grid-template-columns: repeat(2, 1fr); }
+      .english-home-cta { grid-template-columns: 1fr; }
+      .english-hero { grid-template-columns: 1fr; }
+      .english-hero-right { display: none; }
+      .stats-row { grid-template-columns: repeat(2, 1fr); }
+      .course-grid { grid-template-columns: 1fr; }
+      .contact-section { grid-template-columns: 1fr; }
+      .about-section { grid-template-columns: 1fr; }
+      .posts-grid { grid-template-columns: repeat(2, 1fr); }
+      footer { grid-template-columns: 1fr; }
+      .footer-right { align-items: flex-start; gap: 24px; }
     }
 
-    @media (max-width: 600px) {
-      .product-grid { grid-template-columns: repeat(2, 1fr); }
-      .scent-grid { grid-template-columns: repeat(2, 1fr); }
-      .footer-top { grid-template-columns: 1fr; }
-      .footer-bottom { flex-direction: column; gap: 12px; text-align: center; }
-      .banner-content { padding: 48px 24px; }
-      .membership-content, .membership-perks { padding: 48px 24px; }
+    @media (max-width: 700px) {
+      header { padding: 0 20px; }
+      nav { display: none; }
+      .nav-hamburger { display: flex; }
+      .hero-left, .english-hero-left { padding: 40px 24px; }
+      .hobby-grid-section, .english-home-cta, .courses-section, .contact-section, .about-section, .posts-grid { padding: 60px 24px; }
+      .page-header-content { padding: 40px 24px; }
+      .article-body { padding: 48px 24px; }
+      footer { padding: 48px 24px 32px; }
+      .stat-item { padding: 28px 20px; }
+      .stat-number { font-size: 36px; }
+      .posts-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -825,531 +1051,916 @@
 
   <!-- HEADER -->
   <header>
-    <a href="#" class="logo">SHIRO</a>
-    <nav>
-      <a href="#">新製品</a>
-      <a href="#">フレグランス</a>
-      <a href="#">スキンケア</a>
-      <a href="#">ボディケア</a>
-      <a href="#">ギフト</a>
-      <a href="#">店舗</a>
+    <a class="site-logo" onclick="showPage('home')">
+      My World <span>私の好きなこと</span>
+    </a>
+    <nav id="main-nav">
+      <button class="nav-btn active" onclick="showPage('home')">Home</button>
+      <button class="nav-btn" onclick="showPage('piano')">🎹 Piano</button>
+      <button class="nav-btn" onclick="showPage('music')">🎻 Music</button>
+      <button class="nav-btn" onclick="showPage('travel')">✈️ Travel</button>
+      <button class="nav-btn" onclick="showPage('onsen')">♨️ Onsen</button>
+      <button class="nav-btn" onclick="showPage('sake')">🍶 Sake</button>
+      <button class="nav-btn" onclick="showPage('books')">📚 Books</button>
+      <button class="nav-btn" onclick="showPage('movies')">🎬 Movies</button>
+      <button class="nav-btn english-nav" onclick="showPage('english')" style="color:var(--accent-blue)">🇬🇧 English Lesson</button>
     </nav>
-    <div class="header-icons">
-      <button class="icon-btn">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><circle cx="11" cy="11" r="8"/><path d="m21 21-4.35-4.35"/></svg>
-      </button>
-      <button class="icon-btn">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-      </button>
-      <button class="icon-btn">
-        <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M6 2 3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>
-        <span class="cart-count">0</span>
-      </button>
-    </div>
+    <button class="nav-hamburger" onclick="toggleMobileNav()">
+      <svg width="22" height="18" viewBox="0 0 22 18" fill="none"><path d="M1 1h20M1 9h20M1 17h20" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+    </button>
   </header>
 
-  <!-- HERO -->
-  <section class="hero" style="padding:0">
-    <div class="hero-left">
-      <p class="hero-label">New Collection — Spring 2025</p>
-      <h1 class="hero-title">Ice<br><em>Mint</em><br>Series</h1>
-      <p class="hero-subtitle">北海道の清々しいミントの香りを<br>肌に纏う、夏の新コレクション</p>
-      <a href="#" class="hero-cta">
-        コレクションを見る
-        <svg width="20" height="12" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 24 12"><path d="M0 6h22M16 1l6 5-6 5"/></svg>
-      </a>
-    </div>
-    <div class="hero-right">
-      <div class="hero-art">
-        <!-- Abstract mint leaf botanical -->
-        <svg viewBox="0 0 400 500" fill="none" xmlns="http://www.w3.org/2000/svg">
-          <ellipse cx="200" cy="280" rx="100" ry="180" fill="none" stroke="white" stroke-width="0.8" opacity="0.4"/>
-          <ellipse cx="200" cy="280" rx="60" ry="140" fill="none" stroke="white" stroke-width="0.6" opacity="0.3"/>
-          <path d="M200 100 Q240 200 200 460" stroke="white" stroke-width="1" opacity="0.5"/>
-          <path d="M200 160 Q160 200 140 260" stroke="white" stroke-width="0.7" opacity="0.4"/>
-          <path d="M200 160 Q240 200 260 260" stroke="white" stroke-width="0.7" opacity="0.4"/>
-          <path d="M200 220 Q150 240 130 300" stroke="white" stroke-width="0.7" opacity="0.35"/>
-          <path d="M200 220 Q250 240 270 300" stroke="white" stroke-width="0.7" opacity="0.35"/>
-          <path d="M200 280 Q145 300 130 350" stroke="white" stroke-width="0.6" opacity="0.3"/>
-          <path d="M200 280 Q255 300 270 350" stroke="white" stroke-width="0.6" opacity="0.3"/>
-          <circle cx="200" cy="100" r="3" fill="white" opacity="0.5"/>
-          <circle cx="140" cy="260" r="2" fill="white" opacity="0.35"/>
-          <circle cx="260" cy="260" r="2" fill="white" opacity="0.35"/>
-          <!-- Droplets -->
-          <ellipse cx="155" cy="180" rx="4" ry="6" fill="white" opacity="0.25"/>
-          <ellipse cx="248" cy="195" rx="3" ry="5" fill="white" opacity="0.2"/>
-          <ellipse cx="135" cy="320" rx="3" ry="5" fill="white" opacity="0.2"/>
-          <ellipse cx="265" cy="310" rx="4" ry="6" fill="white" opacity="0.2"/>
-        </svg>
-      </div>
-      <div class="hero-product-tag">
-        <span class="name">Ice Mint Body Mist</span>
-        <span class="price">¥4,180（税込）</span>
-      </div>
-    </div>
-  </section>
+  <!-- ══════════════════════════════════════════ -->
+  <!--  HOME PAGE                                 -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="page active" id="page-home">
 
-  <!-- CATEGORY NAV -->
-  <div class="categories">
-    <div class="category-scroll">
-      <button class="category-item active">All <span class="category-ja">すべて</span></button>
-      <button class="category-item">Fragrance <span class="category-ja">フレグランス</span></button>
-      <button class="category-item">Perfume <span class="category-ja">パフューム</span></button>
-      <button class="category-item">Skincare <span class="category-ja">スキンケア</span></button>
-      <button class="category-item">Body Care <span class="category-ja">ボディケア</span></button>
-      <button class="category-item">Hair Care <span class="category-ja">ヘアケア</span></button>
-      <button class="category-item">Hand Care <span class="category-ja">ハンドケア</span></button>
-      <button class="category-item">Makeup <span class="category-ja">メイクアップ</span></button>
-      <button class="category-item">Home <span class="category-ja">ホーム</span></button>
-    </div>
-  </div>
-
-  <!-- PRODUCTS -->
-  <section class="products">
-    <div class="section-header fade-in">
-      <h2 class="section-title">New Arrivals</h2>
-      <a href="#" class="section-link">すべて見る →</a>
-    </div>
-    <div class="product-grid">
-
-      <!-- Product 1 -->
-      <div class="product-card fade-in">
-        <div class="product-image" style="background: linear-gradient(145deg, #dde8dd, #c8d9c0);">
-          <span class="product-badge new">New</span>
-          <svg viewBox="0 0 120 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="35" y="10" width="50" height="130" rx="4" fill="white" opacity="0.8"/>
-            <rect x="40" y="18" width="40" height="114" rx="2" fill="none" stroke="#8a9e8c" stroke-width="0.8" opacity="0.5"/>
-            <rect x="42" y="5" width="36" height="8" rx="2" fill="white" opacity="0.9"/>
-            <text x="60" y="70" text-anchor="middle" font-family="serif" font-size="8" fill="#3a3733" opacity="0.7">SHIRO</text>
-            <text x="60" y="85" text-anchor="middle" font-family="serif" font-size="5.5" fill="#8a9e8c">Ice Mint</text>
-          </svg>
-          <button class="product-add">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-          </button>
+    <div class="home-hero">
+      <div class="hero-left">
+        <p class="hero-eyebrow">Personal Blog — 趣味と英語レッスン</p>
+        <h1 class="hero-title">My<br><em>World</em></h1>
+        <p class="hero-ja">ピアノ・音楽・旅・日本酒・読書・映画・英語</p>
+        <p class="hero-desc">
+          北海道在住。好きなことに囲まれて暮らしています。ピアノとクラシック音楽、旅と温泉、日本酒、読書、映画……そして英語。このブログでは私の趣味や日常を自由につづっています。英会話レッスンも行っていますので、ご興味のある方はぜひ。
+        </p>
+        <div class="hero-tags">
+          <button class="hero-tag" onclick="showPage('piano')">🎹 ピアノ</button>
+          <button class="hero-tag" onclick="showPage('music')">🎻 クラシック音楽</button>
+          <button class="hero-tag" onclick="showPage('travel')">✈️ 旅行</button>
+          <button class="hero-tag" onclick="showPage('onsen')">♨️ 温泉</button>
+          <button class="hero-tag" onclick="showPage('sake')">🍶 日本酒</button>
+          <button class="hero-tag" onclick="showPage('books')">📚 読書</button>
+          <button class="hero-tag" onclick="showPage('movies')">🎬 映画</button>
+          <button class="hero-tag" onclick="showPage('english')">🇬🇧 英語</button>
         </div>
-        <div class="product-info">
-          <p class="product-scent">Ice Mint</p>
-          <p class="product-name">Body Lotion</p>
-          <p class="product-name-ja">アイスミント ボディローション</p>
-          <p class="product-price">¥3,850<span>税込</span></p>
+        <div class="hero-cta-row">
+          <button class="btn-gold" onclick="showPage('english')">英会話レッスンについて →</button>
+          <button class="btn-ghost" onclick="showPage('piano')">ブログを読む</button>
         </div>
       </div>
 
-      <!-- Product 2 -->
-      <div class="product-card fade-in">
-        <div class="product-image" style="background: linear-gradient(145deg, #ede0d8, #d9c4b8);">
-          <span class="product-badge">Best</span>
-          <svg viewBox="0 0 120 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="60" cy="110" rx="32" ry="40" fill="white" opacity="0.8"/>
-            <ellipse cx="60" cy="68" rx="14" ry="22" fill="white" opacity="0.85"/>
-            <rect x="52" y="48" width="16" height="6" rx="3" fill="white" opacity="0.9"/>
-            <text x="60" y="108" text-anchor="middle" font-family="serif" font-size="6" fill="#3a3733" opacity="0.7">SHIRO</text>
-            <text x="60" y="120" text-anchor="middle" font-family="serif" font-size="4.5" fill="#c4a090">Savon</text>
-          </svg>
-          <button class="product-add">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-          </button>
-        </div>
-        <div class="product-info">
-          <p class="product-scent">Savon</p>
-          <p class="product-name">Eau de Parfum</p>
-          <p class="product-name-ja">サボン オードパルファン</p>
-          <p class="product-price">¥7,150<span>税込</span></p>
-        </div>
-      </div>
-
-      <!-- Product 3 -->
-      <div class="product-card fade-in">
-        <div class="product-image" style="background: linear-gradient(145deg, #e4e8e0, #d0d8cc);">
-          <span class="product-badge limited">限定</span>
-          <svg viewBox="0 0 120 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="28" y="30" width="64" height="110" rx="6" fill="white" opacity="0.8"/>
-            <rect x="32" y="38" width="56" height="94" rx="4" fill="none" stroke="#b0bcac" stroke-width="0.8" opacity="0.5"/>
-            <rect x="44" y="22" width="32" height="12" rx="2" fill="white" opacity="0.9"/>
-            <text x="60" y="85" text-anchor="middle" font-family="serif" font-size="7" fill="#3a3733" opacity="0.7">SHIRO</text>
-            <text x="60" y="100" text-anchor="middle" font-family="serif" font-size="5" fill="#8a9e8c">White Lily</text>
-          </svg>
-          <button class="product-add">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-          </button>
-        </div>
-        <div class="product-info">
-          <p class="product-scent">White Lily</p>
-          <p class="product-name">Hand Cream</p>
-          <p class="product-name-ja">ホワイトリリー ハンドクリーム</p>
-          <p class="product-price">¥1,980<span>税込</span></p>
-        </div>
-      </div>
-
-      <!-- Product 4 -->
-      <div class="product-card fade-in">
-        <div class="product-image" style="background: linear-gradient(145deg, #e8e4dc, #d4cfc8);">
-          <svg viewBox="0 0 120 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="38" y="20" width="44" height="120" rx="22" fill="white" opacity="0.8"/>
-            <rect x="44" y="8" width="32" height="16" rx="4" fill="white" opacity="0.9"/>
-            <rect x="50" y="4" width="20" height="6" rx="2" fill="white" opacity="0.7"/>
-            <text x="60" y="85" text-anchor="middle" font-family="serif" font-size="6" fill="#3a3733" opacity="0.7">SHIRO</text>
-            <text x="60" y="100" text-anchor="middle" font-family="serif" font-size="4.5" fill="#9e9890">Earl Grey</text>
-          </svg>
-          <button class="product-add">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-          </button>
-        </div>
-        <div class="product-info">
-          <p class="product-scent">Earl Grey</p>
-          <p class="product-name">Shampoo</p>
-          <p class="product-name-ja">アールグレイ シャンプー</p>
-          <p class="product-price">¥3,300<span>税込</span></p>
-        </div>
-      </div>
-
-      <!-- Product 5 -->
-      <div class="product-card fade-in">
-        <div class="product-image" style="background: linear-gradient(145deg, #e0dcd8, #cec8c0);">
-          <svg viewBox="0 0 120 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="32" y="15" width="56" height="130" rx="5" fill="white" opacity="0.8"/>
-            <rect x="38" y="25" width="44" height="110" rx="3" fill="none" stroke="#c0bab4" stroke-width="0.8" opacity="0.4"/>
-            <rect x="46" y="8" width="28" height="10" rx="2" fill="white" opacity="0.9"/>
-            <text x="60" y="80" text-anchor="middle" font-family="serif" font-size="7" fill="#3a3733" opacity="0.7">SHIRO</text>
-            <text x="60" y="96" text-anchor="middle" font-family="serif" font-size="5" fill="#9e9890">Wood</text>
-          </svg>
-          <button class="product-add">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-          </button>
-        </div>
-        <div class="product-info">
-          <p class="product-scent">Wood</p>
-          <p class="product-name">Body Wash</p>
-          <p class="product-name-ja">ウッド ボディウォッシュ</p>
-          <p class="product-price">¥3,080<span>税込</span></p>
-        </div>
-      </div>
-
-      <!-- Product 6 -->
-      <div class="product-card fade-in">
-        <div class="product-image" style="background: linear-gradient(145deg, #dce4e4, #c8d4d4);">
-          <span class="product-badge new">New</span>
-          <svg viewBox="0 0 120 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <ellipse cx="60" cy="120" rx="36" ry="36" fill="white" opacity="0.8"/>
-            <rect x="48" y="52" width="24" height="72" rx="4" fill="white" opacity="0.85"/>
-            <rect x="52" y="45" width="16" height="10" rx="2" fill="white" opacity="0.9"/>
-            <text x="60" y="120" text-anchor="middle" font-family="serif" font-size="6" fill="#3a3733" opacity="0.7">SHIRO</text>
-            <text x="60" y="133" text-anchor="middle" font-family="serif" font-size="4.5" fill="#8a9e8c">Freesia</text>
-          </svg>
-          <button class="product-add">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-          </button>
-        </div>
-        <div class="product-info">
-          <p class="product-scent">Freesia Mist</p>
-          <p class="product-name">Face Mist</p>
-          <p class="product-name-ja">フリージア ミスト フェイスミスト</p>
-          <p class="product-price">¥5,500<span>税込</span></p>
-        </div>
-      </div>
-
-      <!-- Product 7 -->
-      <div class="product-card fade-in">
-        <div class="product-image" style="background: linear-gradient(145deg, #e8dce8, #d4c4d4);">
-          <svg viewBox="0 0 120 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="30" y="18" width="60" height="125" rx="8" fill="white" opacity="0.8"/>
-            <rect x="36" y="26" width="48" height="109" rx="6" fill="none" stroke="#c4b4c4" stroke-width="0.8" opacity="0.4"/>
-            <text x="60" y="82" text-anchor="middle" font-family="serif" font-size="7" fill="#3a3733" opacity="0.7">SHIRO</text>
-            <text x="60" y="97" text-anchor="middle" font-family="serif" font-size="4.5" fill="#9e9890">Kinmokusei</text>
-          </svg>
-          <button class="product-add">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-          </button>
-        </div>
-        <div class="product-info">
-          <p class="product-scent">Kinmokusei</p>
-          <p class="product-name">Room Diffuser</p>
-          <p class="product-name-ja">キンモクセイ ルームディフューザー</p>
-          <p class="product-price">¥6,600<span>税込</span></p>
-        </div>
-      </div>
-
-      <!-- Product 8 -->
-      <div class="product-card fade-in">
-        <div class="product-image" style="background: linear-gradient(145deg, #f0e8dc, #e4d8c4);">
-          <span class="product-badge limited">限定</span>
-          <svg viewBox="0 0 120 180" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="35" y="28" width="50" height="110" rx="25" fill="white" opacity="0.8"/>
-            <rect x="44" y="18" width="32" height="14" rx="4" fill="white" opacity="0.9"/>
-            <text x="60" y="88" text-anchor="middle" font-family="serif" font-size="6" fill="#3a3733" opacity="0.7">SHIRO</text>
-            <text x="60" y="102" text-anchor="middle" font-family="serif" font-size="4.5" fill="#d4b890">Sakura</text>
-          </svg>
-          <button class="product-add">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>
-          </button>
-        </div>
-        <div class="product-info">
-          <p class="product-scent">Sakura</p>
-          <p class="product-name">Perfume Oil</p>
-          <p class="product-name-ja">さくら パフュームオイル</p>
-          <p class="product-price">¥4,400<span>税込</span></p>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- BANNER -->
-  <div class="banner">
-    <div class="banner-visual">
-      <svg viewBox="0 0 300 400" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <circle cx="150" cy="200" r="120" fill="none" stroke="white" stroke-width="0.8" opacity="0.3"/>
-        <circle cx="150" cy="200" r="80" fill="none" stroke="white" stroke-width="0.6" opacity="0.25"/>
-        <circle cx="150" cy="200" r="40" fill="none" stroke="white" stroke-width="0.5" opacity="0.2"/>
-        <path d="M150 80 Q200 150 150 320" stroke="white" stroke-width="1" opacity="0.4"/>
-        <path d="M150 120 Q90 160 70 220" stroke="white" stroke-width="0.7" opacity="0.35"/>
-        <path d="M150 120 Q210 160 230 220" stroke="white" stroke-width="0.7" opacity="0.35"/>
-        <circle cx="150" cy="80" r="4" fill="white" opacity="0.5"/>
-        <ellipse cx="105" cy="175" rx="6" ry="9" fill="white" opacity="0.2"/>
-        <ellipse cx="198" cy="190" rx="5" ry="8" fill="white" opacity="0.2"/>
-      </svg>
-    </div>
-    <div class="banner-content fade-in">
-      <p class="banner-eyebrow">SHIRO Gift</p>
-      <h2 class="banner-title">贈り物に、<br>自然の香りを。</h2>
-      <p class="banner-desc">大切な人への贈り物に、SHIROの香りをお届けします。丁寧にラッピングされたギフトセットは、季節の香りとともに特別な気持ちを伝えます。</p>
-      <a href="#" class="btn-outline">
-        ギフトを探す
-        <svg width="16" height="10" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 20 10"><path d="M0 5h18M13 1l5 4-5 4"/></svg>
-      </a>
-    </div>
-  </div>
-
-  <!-- SCENT FINDER -->
-  <section class="scent-finder">
-    <h2 class="section-title fade-in">Find Your Scent</h2>
-    <p class="scent-subtitle fade-in">あなたにぴったりの香りを見つけよう</p>
-    <div class="scent-grid">
-      <div class="scent-chip fade-in">
-        <span class="scent-chip-icon">🌸</span>
-        <span class="scent-chip-name">Floral</span>
-        <span class="scent-chip-ja">フローラル</span>
-      </div>
-      <div class="scent-chip fade-in">
-        <span class="scent-chip-icon">🌿</span>
-        <span class="scent-chip-name">Fresh</span>
-        <span class="scent-chip-ja">フレッシュ</span>
-      </div>
-      <div class="scent-chip fade-in">
-        <span class="scent-chip-icon">🪵</span>
-        <span class="scent-chip-name">Woody</span>
-        <span class="scent-chip-ja">ウッディ</span>
-      </div>
-      <div class="scent-chip fade-in">
-        <span class="scent-chip-icon">🍵</span>
-        <span class="scent-chip-name">Deep</span>
-        <span class="scent-chip-ja">ディープ</span>
-      </div>
-    </div>
-    <a href="#" class="btn-sage">
-      香りを診断する
-      <svg width="16" height="10" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 20 10"><path d="M0 5h18M13 1l5 4-5 4"/></svg>
-    </a>
-  </section>
-
-  <!-- EDITORIAL -->
-  <section class="editorial">
-    <div class="section-header fade-in">
-      <h2 class="section-title">Stories</h2>
-      <a href="#" class="section-link">特集一覧 →</a>
-    </div>
-    <div class="editorial-grid">
-      <div class="editorial-card fade-in">
-        <div class="editorial-image sage-bg">
-          <svg viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <path d="M100 20 Q140 80 100 240" stroke="white" stroke-width="1.2" opacity="0.5"/>
-            <path d="M100 60 Q65 90 55 140" stroke="white" stroke-width="0.8" opacity="0.4"/>
-            <path d="M100 60 Q135 90 145 140" stroke="white" stroke-width="0.8" opacity="0.4"/>
-            <path d="M100 110 Q60 130 48 175" stroke="white" stroke-width="0.8" opacity="0.35"/>
-            <path d="M100 110 Q140 130 152 175" stroke="white" stroke-width="0.8" opacity="0.35"/>
-            <ellipse cx="68" cy="110" rx="5" ry="8" fill="white" opacity="0.25"/>
-            <ellipse cx="134" cy="125" rx="4" ry="7" fill="white" opacity="0.22"/>
-          </svg>
-        </div>
-        <div class="editorial-caption">
-          <p class="editorial-tag">Ingredients</p>
-          <p class="editorial-title">北海道のミントが香りになるまでの物語</p>
-        </div>
-      </div>
-      <div class="editorial-card fade-in">
-        <div class="editorial-image blush-bg">
-          <svg viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <circle cx="100" cy="130" r="70" fill="none" stroke="white" stroke-width="1" opacity="0.4"/>
-            <circle cx="100" cy="130" r="40" fill="none" stroke="white" stroke-width="0.8" opacity="0.3"/>
-            <path d="M100 60 L100 200" stroke="white" stroke-width="0.8" opacity="0.4"/>
-            <path d="M30 130 L170 130" stroke="white" stroke-width="0.8" opacity="0.4"/>
-          </svg>
-        </div>
-        <div class="editorial-caption">
-          <p class="editorial-tag">Ritual</p>
-          <p class="editorial-title">毎朝のスキンケア、香りとともに</p>
-        </div>
-      </div>
-      <div class="editorial-card fade-in">
-        <div class="editorial-image stone-bg">
-          <svg viewBox="0 0 200 260" fill="none" xmlns="http://www.w3.org/2000/svg">
-            <rect x="60" y="50" width="80" height="160" rx="6" fill="white" opacity="0.3"/>
-            <rect x="70" y="60" width="60" height="140" rx="4" fill="none" stroke="white" stroke-width="0.8" opacity="0.4"/>
-            <text x="100" y="140" text-anchor="middle" font-family="serif" font-size="12" fill="white" opacity="0.5">SHIRO</text>
-          </svg>
-        </div>
-        <div class="editorial-caption">
-          <p class="editorial-tag">Gift Guide</p>
-          <p class="editorial-title">母の日に贈る、心に残る香り</p>
+      <div class="hero-right">
+        <div class="hero-mosaic">
+          <div class="mosaic-cell" onclick="showPage('piano')">
+            <img src="https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=600&q=80" alt="Piano" loading="lazy" />
+            <div class="cell-label">🎹 Piano</div>
+          </div>
+          <div class="mosaic-cell" onclick="showPage('travel')">
+            <img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=600&q=80" alt="Japan" loading="lazy" />
+            <div class="cell-label">✈️ Travel</div>
+          </div>
+          <div class="mosaic-cell" onclick="showPage('onsen')">
+            <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=600&q=80" alt="Onsen" loading="lazy" />
+            <div class="cell-label">♨️ Onsen</div>
+          </div>
+          <div class="mosaic-cell" onclick="showPage('sake')">
+            <img src="https://images.unsplash.com/photo-1582562124811-c09040d0a901?w=600&q=80" alt="Sake" loading="lazy" />
+            <div class="cell-label">🍶 Sake</div>
+          </div>
+          <div class="mosaic-cell span2" onclick="showPage('music')">
+            <img src="https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=800&q=80" alt="Orchestra" loading="lazy" />
+            <div class="cell-label">🎻 Classical Music</div>
+          </div>
         </div>
       </div>
     </div>
-  </section>
 
-  <!-- MEMBERSHIP -->
-  <div class="membership">
-    <div class="membership-content fade-in">
-      <h2>SHIRO<br>Membership</h2>
-      <p>SHIRO Membership Programでは、お買い物のたびにポイントが貯まり、特別なギフトや先行発売などの特典をお楽しみいただけます。</p>
-      <a href="#" class="btn-outline">
-        会員登録する
-        <svg width="16" height="10" fill="none" stroke="currentColor" stroke-width="1.2" viewBox="0 0 20 10"><path d="M0 5h18M13 1l5 4-5 4"/></svg>
-      </a>
+    <!-- Hobby Grid -->
+    <div class="hobby-grid-section">
+      <p class="section-label fade-up">My Hobbies</p>
+      <h2 class="section-heading fade-up">好きなこと、<br>すべて。</h2>
+      <div class="hobby-cards">
+        <div class="hobby-card fade-up" onclick="showPage('piano')">
+          <img src="https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=500&q=80" alt="Piano" loading="lazy" />
+          <div class="hobby-card-overlay">
+            <div class="hobby-card-icon">🎹</div>
+            <div class="hobby-card-name">Piano</div>
+            <div class="hobby-card-ja">ピアノ</div>
+            <div class="hobby-card-arrow">→</div>
+          </div>
+        </div>
+        <div class="hobby-card fade-up" onclick="showPage('music')">
+          <img src="https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=500&q=80" alt="Classical Music" loading="lazy" />
+          <div class="hobby-card-overlay">
+            <div class="hobby-card-icon">🎻</div>
+            <div class="hobby-card-name">Classical Music</div>
+            <div class="hobby-card-ja">クラシック音楽</div>
+            <div class="hobby-card-arrow">→</div>
+          </div>
+        </div>
+        <div class="hobby-card fade-up" onclick="showPage('travel')">
+          <img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=500&q=80" alt="Travel" loading="lazy" />
+          <div class="hobby-card-overlay">
+            <div class="hobby-card-icon">✈️</div>
+            <div class="hobby-card-name">Travel</div>
+            <div class="hobby-card-ja">旅行</div>
+            <div class="hobby-card-arrow">→</div>
+          </div>
+        </div>
+        <div class="hobby-card fade-up" onclick="showPage('onsen')">
+          <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=500&q=80" alt="Onsen" loading="lazy" />
+          <div class="hobby-card-overlay">
+            <div class="hobby-card-icon">♨️</div>
+            <div class="hobby-card-name">Onsen</div>
+            <div class="hobby-card-ja">温泉</div>
+            <div class="hobby-card-arrow">→</div>
+          </div>
+        </div>
+        <div class="hobby-card fade-up" onclick="showPage('sake')">
+          <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=500&q=80" alt="Sake" loading="lazy" />
+          <div class="hobby-card-overlay">
+            <div class="hobby-card-icon">🍶</div>
+            <div class="hobby-card-name">日本酒</div>
+            <div class="hobby-card-ja">Nihonshu</div>
+            <div class="hobby-card-arrow">→</div>
+          </div>
+        </div>
+        <div class="hobby-card fade-up" onclick="showPage('books')">
+          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&q=80" alt="Books" loading="lazy" />
+          <div class="hobby-card-overlay">
+            <div class="hobby-card-icon">📚</div>
+            <div class="hobby-card-name">Books</div>
+            <div class="hobby-card-ja">読書</div>
+            <div class="hobby-card-arrow">→</div>
+          </div>
+        </div>
+        <div class="hobby-card fade-up" onclick="showPage('movies')">
+          <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=500&q=80" alt="Movies" loading="lazy" />
+          <div class="hobby-card-overlay">
+            <div class="hobby-card-icon">🎬</div>
+            <div class="hobby-card-name">Movies</div>
+            <div class="hobby-card-ja">映画鑑賞</div>
+            <div class="hobby-card-arrow">→</div>
+          </div>
+        </div>
+        <div class="hobby-card fade-up" onclick="showPage('english')" style="border: 1px solid rgba(123,179,212,0.3);">
+          <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b6f72?w=500&q=80" alt="English" loading="lazy" />
+          <div class="hobby-card-overlay" style="background: linear-gradient(to top, rgba(10,21,32,0.95) 0%, rgba(10,21,32,0.3) 50%, transparent 100%);">
+            <div class="hobby-card-icon">🇬🇧</div>
+            <div class="hobby-card-name" style="color: var(--accent-blue);">English Lesson</div>
+            <div class="hobby-card-ja">英会話レッスン受付中</div>
+            <div class="hobby-card-arrow" style="color:var(--accent-blue)">→</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="membership-perks fade-in">
-      <div class="perk">
-        <div class="perk-icon">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-        </div>
-        <div>
-          <p class="perk-title">Points</p>
-          <p class="perk-desc">お買い物金額に応じてポイントが貯まります</p>
-        </div>
-      </div>
-      <div class="perk">
-        <div class="perk-icon">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M20 12V22H4V12"/><path d="M22 7H2v5h20V7z"/><path d="M12 22V7"/><path d="M12 7H7.5a2.5 2.5 0 0 1 0-5C11 2 12 7 12 7z"/><path d="M12 7h4.5a2.5 2.5 0 0 0 0-5C13 2 12 7 12 7z"/></svg>
-        </div>
-        <div>
-          <p class="perk-title">Birthday Gift</p>
-          <p class="perk-desc">誕生月にお得な特典をプレゼント</p>
-        </div>
-      </div>
-      <div class="perk">
-        <div class="perk-icon">
-          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M18 8h1a4 4 0 0 1 0 8h-1"/><path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z"/><line x1="6" y1="1" x2="6" y2="4"/><line x1="10" y1="1" x2="10" y2="4"/><line x1="14" y1="1" x2="14" y2="4"/></svg>
-        </div>
-        <div>
-          <p class="perk-title">Early Access</p>
-          <p class="perk-desc">新製品の先行購入・試香の機会をご用意</p>
-        </div>
-      </div>
-    </div>
-  </div>
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="footer-top">
+    <!-- English teaser on home -->
+    <div class="english-home-cta">
+      <div class="english-home-left">
+        <p class="section-label">English Lesson</p>
+        <h2>英会話、<br>一緒に楽しみましょう。</h2>
+        <p>英語を話せるようになりたい方へ。旅行英語、日常会話、ビジネス英語など、目標に合わせた個別レッスンを提供しています。北海道在住で英語学習に興味のある生徒さんを募集中です。オンラインでも対応可能。まずはお気軽にご連絡ください。</p>
+        <button class="btn-gold" onclick="showPage('english')">レッスン詳細を見る →</button>
+      </div>
+      <div class="english-home-right">
+        <div class="feature-item">
+          <div class="feature-icon">🗣️</div>
+          <div class="feature-text">
+            <h4>会話重視のレッスン</h4>
+            <p>読み書きより「話す」ことに特化。実践的な英会話力を身につけます。</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">🎯</div>
+          <div class="feature-text">
+            <h4>目標別カリキュラム</h4>
+            <p>旅行・ビジネス・日常会話など、あなたの目標に合わせた内容でレッスンします。</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">💻</div>
+          <div class="feature-text">
+            <h4>オンライン・対面どちらも</h4>
+            <p>北海道での対面レッスン、またはZoom等オンラインにも対応しています。</p>
+          </div>
+        </div>
+        <div class="feature-item">
+          <div class="feature-icon">😊</div>
+          <div class="feature-text">
+            <h4>初心者大歓迎</h4>
+            <p>英語が全くはじめての方も安心。丁寧にサポートします。</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <footer>
       <div>
-        <span class="footer-logo">SHIRO</span>
-        <p class="footer-tagline">北海道生まれの自然派コスメブランド。<br>素材の力と香りを大切に、<br>肌と心に寄り添うプロダクトをお届けします。</p>
-        <div class="footer-social">
-          <a href="#" class="social-link">
-            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 1 0 0 12.324 6.162 6.162 0 0 0 0-12.324zM12 16a4 4 0 1 1 0-8 4 4 0 0 1 0 8zm6.406-11.845a1.44 1.44 0 1 0 0 2.881 1.44 1.44 0 0 0 0-2.881z"/></svg>
-          </a>
-          <a href="#" class="social-link">
-            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
-          </a>
-          <a href="#" class="social-link">
-            <svg width="14" height="14" fill="currentColor" viewBox="0 0 24 24"><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.33 6.33 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V8.89a8.28 8.28 0 004.83 1.53V7.0a4.85 4.85 0 01-1.06-.31z"/></svg>
-          </a>
+        <span class="footer-logo">My World</span>
+        <p>北海道から、好きなことを発信するブログ。<br>ピアノ・音楽・旅・温泉・日本酒・読書・映画・英語。<br>英会話レッスンも行っています。</p>
+      </div>
+      <div class="footer-right">
+        <div class="footer-nav">
+          <button onclick="showPage('piano')">Piano</button>
+          <button onclick="showPage('music')">Music</button>
+          <button onclick="showPage('travel')">Travel</button>
+          <button onclick="showPage('onsen')">Onsen</button>
+          <button onclick="showPage('sake')">Sake</button>
+          <button onclick="showPage('books')">Books</button>
+          <button onclick="showPage('movies')">Movies</button>
+          <button onclick="showPage('english')">English Lesson</button>
+        </div>
+        <div class="footer-copy">© 2025 My World Blog. All rights reserved.</div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!--  PIANO PAGE                                -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="page" id="page-piano">
+    <div class="page-header">
+      <div class="page-header-bg">
+        <img src="https://images.unsplash.com/photo-1520523839897-bd0b52f945a0?w=1600&q=80" alt="Piano" loading="lazy" />
+      </div>
+      <div class="page-header-overlay"></div>
+      <div class="page-header-content">
+        <p class="eyebrow" style="color:var(--gold)">Hobby — ピアノ</p>
+        <h1>🎹 <em>Piano</em></h1>
+        <p class="subtitle">鍵盤の上に広がる、もうひとつの世界</p>
+      </div>
+    </div>
+
+    <div class="article-body">
+      <p class="article-lead">"The piano is the easiest instrument to play in the beginning, and the hardest to master in the end."</p>
+      <p class="article-text">
+        ピアノとの出会いは幼少期にさかのぼります。最初は親に促されるまま始めたレッスンでしたが、いつの間にかピアノの前に座る時間が一日のなかで最も大切なひとときになっていました。
+      </p>
+      <p class="article-text">
+        今でも毎日少しでも弾くようにしています。忙しい日でも、10分でもいいから鍵盤に触れる。その積み重ねが、少しずつ自分の演奏を育てていくのだと信じています。
+      </p>
+      <img class="article-photo" src="https://images.unsplash.com/photo-1552422535-c45813c61732?w=1200&q=80" alt="Piano keys" loading="lazy" />
+      <p class="article-photo-caption">光の差し込むスタジオで。静かな朝の練習が一番好きです。</p>
+
+      <div class="pull-quote">
+        <p>「ショパンのノクターンを弾くとき、自分の内側に静かな湖が生まれる気がします。」</p>
+      </div>
+
+      <p class="article-text">
+        好きな作曲家はショパンとドビュッシー。ショパンの夜想曲（ノクターン）の繊細な旋律と、ドビュッシーの印象派的な和声の揺らぎ——どちらも「絵を描くように音楽を語る」という感覚が好きです。
+      </p>
+      <p class="article-text">
+        最近は<strong>ドビュッシーの「月の光」</strong>を練習中。シンプルに見えて、表情をつけることが難しい曲です。弱音のコントロール、ペダルのタイミング……奥深さに何度驚かされることか。
+      </p>
+
+      <hr class="article-divider" />
+
+      <p class="article-text">
+        ピアノは孤独な楽器でもあります。舞台に上がれば一人きり。でもその孤独の中にこそ、音楽の本質があると思っています。自分と向き合い、作曲家と対話し、聴衆に届ける——その一連の営みが、なんとも尊い。
+      </p>
+    </div>
+
+    <div class="posts-grid">
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1511192336575-5a79af67a629?w=600&q=80" alt="Piano" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--gold)">Piano</p>
+          <p class="post-card-title">ショパン ノクターン第20番を弾いて</p>
+          <p class="post-card-desc">「遺作」と呼ばれる名曲。シンプルな旋律の中に込められた深い感情を探って。</p>
         </div>
       </div>
-
-      <div class="footer-col">
-        <h4>Products</h4>
-        <ul>
-          <li><a href="#">フレグランス</a></li>
-          <li><a href="#">パフューム</a></li>
-          <li><a href="#">スキンケア</a></li>
-          <li><a href="#">ボディケア</a></li>
-          <li><a href="#">ヘアケア</a></li>
-          <li><a href="#">メイクアップ</a></li>
-          <li><a href="#">ホーム</a></li>
-        </ul>
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1515879218367-8466d910aaa4?w=600&q=80" alt="Practice" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--gold)">Piano</p>
+          <p class="post-card-title">毎日の練習ルーティンを見直した</p>
+          <p class="post-card-desc">スケール、アルペジオ、そして好きな曲へ。30分でも密度を上げる方法。</p>
+        </div>
       </div>
-
-      <div class="footer-col">
-        <h4>Services</h4>
-        <ul>
-          <li><a href="#">会員特典</a></li>
-          <li><a href="#">ギフトラッピング</a></li>
-          <li><a href="#">ｅギフト</a></li>
-          <li><a href="#">定期お届け便</a></li>
-          <li><a href="#">返金・交換</a></li>
-          <li><a href="#">よくあるご質問</a></li>
-        </ul>
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1493225457124-a3eb161ffa5f?w=600&q=80" alt="Concert" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--gold)">Piano</p>
+          <p class="post-card-title">発表会に向けて——緊張と向き合う</p>
+          <p class="post-card-desc">人前で弾くことの怖さと喜び。準備の過程で気づいたことを正直に書きました。</p>
+        </div>
       </div>
+    </div>
+  </div>
 
-      <div class="footer-col">
-        <h4>About</h4>
-        <ul>
-          <li><a href="#">ABOUT SHIRO</a></li>
-          <li><a href="#">店舗一覧</a></li>
-          <li><a href="#">SHIRO CAFE</a></li>
-          <li><a href="#">会社概要</a></li>
-          <li><a href="#">採用情報</a></li>
-          <li><a href="#">お問い合わせ</a></li>
-        </ul>
+  <!-- ══════════════════════════════════════════ -->
+  <!--  CLASSICAL MUSIC PAGE                      -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="page" id="page-music">
+    <div class="page-header">
+      <div class="page-header-bg">
+        <img src="https://images.unsplash.com/photo-1465847899084-d164df4dedc6?w=1600&q=80" alt="Orchestra" loading="lazy" />
+      </div>
+      <div class="page-header-overlay"></div>
+      <div class="page-header-content">
+        <p class="eyebrow" style="color:var(--accent-plum)">Hobby — クラシック音楽</p>
+        <h1>🎻 <em>Classical</em><br>Music</h1>
+        <p class="subtitle">人類が積み重ねてきた音の宝庫</p>
       </div>
     </div>
 
-    <div class="footer-bottom">
-      <span>© 2025 SHIRO Inc. All Rights Reserved.</span>
-      <div style="display:flex;gap:24px;">
-        <a href="#" style="color:var(--ash);text-decoration:none;font-size:11px;">プライバシーポリシー</a>
-        <a href="#" style="color:var(--ash);text-decoration:none;font-size:11px;">ご利用規約</a>
-        <a href="#" style="color:var(--ash);text-decoration:none;font-size:11px;">特定商取引法</a>
+    <div class="article-body">
+      <p class="article-lead">"Music gives a soul to the universe, wings to the mind, flight to the imagination, and life to everything." — Plato</p>
+      <p class="article-text">
+        コンサートホールの暗がりの中で、指揮者が棒を振り上げる瞬間の静寂——あの張り詰めた空気が好きでたまりません。クラシック音楽の鑑賞は、単なる趣味を超えて、私にとって精神的な栄養のようなものです。
+      </p>
+      <img class="article-photo" src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1200&q=80" alt="Concert" loading="lazy" />
+      <p class="article-photo-caption">札幌コンサートホール Kitaraにて。北海道内でも素晴らしいクラシックの演奏を楽しめます。</p>
+
+      <div class="pull-quote">
+        <p>「ベートーヴェンの第九を生で聴いたとき、音楽が人を変えることを初めて確信しました。」</p>
+      </div>
+
+      <p class="article-text">
+        好きな作曲家を挙げればキリがありませんが、特に心を揺さぶられるのは<strong>ベートーヴェン、マーラー、ラヴェル</strong>の三人。ベートーヴェンの交響曲の骨格美、マーラーの壮大な宇宙観、ラヴェルの精緻な色彩感覚——それぞれにまったく異なる「宇宙」があります。
+      </p>
+      <p class="article-text">
+        最近ハマっているのはグスタフ・マーラーの交響曲第9番。「死と向き合い、それでも生を肯定する」という深いテーマが、聴くたびに新しい意味を帯びてきます。
+      </p>
+    </div>
+
+    <div class="posts-grid">
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1415886962‐f4270d25f58e?w=600&q=80" onerror="this.src='https://images.unsplash.com/photo-1501612780327-45045538702b?w=600&q=80'" alt="Orchestra" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--accent-plum)">Music</p>
+          <p class="post-card-title">マーラー 交響曲第9番の深淵</p>
+          <p class="post-card-desc">最後の完成交響曲が語る「死」と「愛」。バーンスタイン指揮の録音と共に。</p>
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1461784121038-f088ca1e7714?w=600&q=80" alt="Vinyl" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--accent-plum)">Music</p>
+          <p class="post-card-title">レコードで聴くクラシックの喜び</p>
+          <p class="post-card-desc">アナログの温かみと、デジタルの利便性。それぞれの良さを語ります。</p>
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1518609878373-06d740f60d8b?w=600&q=80" alt="Stage" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--accent-plum)">Music</p>
+          <p class="post-card-title">北海道のクラシックシーンを支えるKitara</p>
+          <p class="post-card-desc">札幌コンサートホールKitaraの魅力と、これまでに感動した演奏の記録。</p>
+        </div>
       </div>
     </div>
-  </footer>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!--  TRAVEL PAGE                               -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="page" id="page-travel">
+    <div class="page-header">
+      <div class="page-header-bg">
+        <img src="https://images.unsplash.com/photo-1528360983277-13d401cdc186?w=1600&q=80" alt="Japan Travel" loading="lazy" />
+      </div>
+      <div class="page-header-overlay"></div>
+      <div class="page-header-content">
+        <p class="eyebrow" style="color:var(--accent-sage)">Hobby — 旅行</p>
+        <h1>✈️ <em>Travel</em></h1>
+        <p class="subtitle">知らない場所で、自分を発見する</p>
+      </div>
+    </div>
+
+    <div class="article-body">
+      <p class="article-lead">"The world is a book, and those who do not travel read only one page." — Saint Augustine</p>
+      <p class="article-text">
+        旅が好きです。特に「目的地まで移動する過程」そのものが好き。飛行機の窓から眺める雲の海、新幹線で移り変わる景色、知らない街角の匂い——旅の醍醐味はそういう「途中」の感覚にあると思っています。
+      </p>
+      <img class="article-photo" src="https://images.unsplash.com/photo-1480796927426-f609979314bd?w=1200&q=80" alt="Tokyo" loading="lazy" />
+      <p class="article-photo-caption">旅先では必ず朝早く出かけます。人の少ない時間帯の街が、一番その土地の表情を見せてくれる気がして。</p>
+
+      <div class="pull-quote">
+        <p>「旅は非日常ではなく、日常の延長線上にある別の日常だと思っています。」</p>
+      </div>
+
+      <p class="article-text">
+        北海道を拠点にしているので、本州の文化の密度には毎回驚かされます。京都の細い路地、奈良の鹿、東京の人の多さ——どこも非日常でありながら、確かに「日本」という連続性の中にある。その感覚が好きです。
+      </p>
+      <p class="article-text">
+        海外では<strong>ヨーロッパ</strong>に惹かれます。音楽の歴史が積み重なった街——ウィーン、プラハ、パリ。いつかコンサートホールを巡る旅をしたいと思っています。
+      </p>
+    </div>
+
+    <div class="posts-grid">
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1526481280693-3bfa7568e0f3?w=600&q=80" alt="Kyoto" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--accent-sage)">Travel</p>
+          <p class="post-card-title">京都、早朝の伏見稲荷へ</p>
+          <p class="post-card-desc">開門と同時に入る千本鳥居。人のいない静寂の中で感じたこと。</p>
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1549692520-acc6669e2f0c?w=600&q=80" alt="Europe" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--accent-sage)">Travel</p>
+          <p class="post-card-title">ウィーンで聴いたベートーヴェン</p>
+          <p class="post-card-desc">楽都ウィーンの国立歌劇場。本場のオペラが人生を変えた夜のこと。</p>
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1438786657495-640937046f73?w=600&q=80" alt="Hokkaido" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--accent-sage)">Travel</p>
+          <p class="post-card-title">北海道の端、知床へ</p>
+          <p class="post-card-desc">自分の住む土地を旅する。知床の原始の自然に圧倒された二日間。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!--  ONSEN PAGE                                -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="page" id="page-onsen">
+    <div class="page-header">
+      <div class="page-header-bg">
+        <img src="https://images.unsplash.com/photo-1545569341-9eb8b30979d9?w=1600&q=80" alt="Onsen" loading="lazy" />
+      </div>
+      <div class="page-header-overlay"></div>
+      <div class="page-header-content">
+        <p class="eyebrow" style="color:var(--accent-blue)">Hobby — 温泉</p>
+        <h1>♨️ <em>Onsen</em></h1>
+        <p class="subtitle">湯けむりの向こうに見える、本当の休息</p>
+      </div>
+    </div>
+
+    <div class="article-body">
+      <p class="article-lead">"The cure for anything is salt water — sweat, tears, or the sea." Or, in Japan — an onsen.</p>
+      <p class="article-text">
+        北海道在住の特権のひとつが、温泉へのアクセスのよさです。登別、洞爺、定山渓、層雲峡——車で数時間の範囲に、日本を代表する名湯がいくつもあります。
+      </p>
+      <img class="article-photo" src="https://images.unsplash.com/photo-1494548162494-384bba4ab999?w=1200&q=80" alt="Onsen steam" loading="lazy" />
+      <p class="article-photo-caption">雪の中の露天風呂。北海道の冬ならではの贅沢。</p>
+
+      <div class="pull-quote">
+        <p>「温泉は、身体を洗うのではなく、心を洗う場所だと思っています。」</p>
+      </div>
+
+      <p class="article-text">
+        温泉の何が好きかといえば、「何もしなくていい」という開放感です。スマホも本も持ち込まず、ただ湯に浸かり、湯気の向こうの景色をぼんやり眺める。その時間の贅沢さといったら。
+      </p>
+      <p class="article-text">
+        泉質にもこだわりがあって、<strong>硫黄泉</strong>と<strong>炭酸水素塩泉</strong>が特に好き。肌がつるつるになる美肌の湯と、硫黄の香りが混ざった時間は、日常から完全に切り離してくれます。
+      </p>
+    </div>
+
+    <div class="posts-grid">
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1532453288672-3a27e9be9efd?w=600&q=80" alt="Noboribetsu" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--accent-blue)">Onsen</p>
+          <p class="post-card-title">登別温泉 極上の硫黄泉</p>
+          <p class="post-card-desc">地獄谷の迫力と、多彩な泉質。北海道を代表する温泉地の魅力。</p>
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1583418007992-a8e33396e08a?w=600&q=80" alt="Toya" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--accent-blue)">Onsen</p>
+          <p class="post-card-title">洞爺湖温泉で過ごした静かな一泊</p>
+          <p class="post-card-desc">湖に浮かぶ花火を眺めながら入る露天風呂。忘れられない夏の夜。</p>
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1519245659620-e859806a8d3b?w=600&q=80" alt="Jozankei" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--accent-blue)">Onsen</p>
+          <p class="post-card-title">定山渓 紅葉と温泉の秋旅</p>
+          <p class="post-card-desc">札幌から車で1時間。渓谷の紅葉を眺めながらの日帰り入浴記。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!--  SAKE PAGE                                 -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="page" id="page-sake">
+    <div class="page-header">
+      <div class="page-header-bg">
+        <img src="https://images.unsplash.com/photo-1578662996442-48f60103fc96?w=1600&q=80" alt="Japanese Sake" loading="lazy" />
+      </div>
+      <div class="page-header-overlay"></div>
+      <div class="page-header-content">
+        <p class="eyebrow" style="color:var(--gold)">Hobby — 日本酒</p>
+        <h1>🍶 <em>Nihonshu</em></h1>
+        <p class="subtitle">米と水と微生物が生み出す、奇跡の一杯</p>
+      </div>
+    </div>
+
+    <div class="article-body">
+      <p class="article-lead">"Sake is not just a drink. It is a story of land, water, rice, and the hands that brought them together."</p>
+      <p class="article-text">
+        日本酒にハマったきっかけは、ある居酒屋で飲んだ北海道の地酒でした。それまで「日本酒は辛口か甘口か」程度の知識しかなかったのが、その一杯で世界が広がりました。
+      </p>
+      <img class="article-photo" src="https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=1200&q=80" alt="Sake cups" loading="lazy" />
+      <p class="article-photo-caption">おちょこに注がれた純米吟醸。色の透明感と、立ち上る香りが好きです。</p>
+
+      <div class="pull-quote">
+        <p>「同じ銘柄でも、季節によって、温度によって、器によって、まったく違う顔を見せる。それが日本酒の魔法。」</p>
+      </div>
+
+      <p class="article-text">
+        好きな種類は<strong>純米吟醸</strong>。米の旨みとフルーティな香りのバランスが好きです。北海道の蔵元では「男山」「千歳鶴」が好きですが、新潟や山形の銘柄も積極的に試しています。
+      </p>
+      <p class="article-text">
+        温度にもこだわりがあって、季節によって常温・ぬる燗・冷酒を使い分けます。冬の寒い夜、徳利でゆっくり温めた燗酒を一口飲む瞬間——これ以上の幸福はないかもしれない、と思うほどです。
+      </p>
+    </div>
+
+    <div class="posts-grid">
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1571115764595-644a1f56a55c?w=600&q=80" alt="Sake brewery" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--gold)">Sake</p>
+          <p class="post-card-title">男山酒造を訪ねて——旭川の老舗蔵</p>
+          <p class="post-card-desc">北海道を代表する老舗蔵元。丁寧な仕込みの現場と試飲の記録。</p>
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1504270997636-07ddfbd48945?w=600&q=80" alt="Sake" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--gold)">Sake</p>
+          <p class="post-card-title">初心者のための日本酒入門ガイド</p>
+          <p class="post-card-desc">純米・吟醸・本醸造の違いから、温度帯の選び方まで。知ると10倍楽しくなる。</p>
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1563245372-f21724e3856d?w=600&q=80" alt="Food pairing" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--gold)">Sake</p>
+          <p class="post-card-title">日本酒と料理のペアリング術</p>
+          <p class="post-card-desc">魚介、チーズ、和菓子まで。意外な組み合わせが生む新しい味の世界。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!--  BOOKS PAGE                                -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="page" id="page-books">
+    <div class="page-header">
+      <div class="page-header-bg">
+        <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=1600&q=80" alt="Books" loading="lazy" />
+      </div>
+      <div class="page-header-overlay"></div>
+      <div class="page-header-content">
+        <p class="eyebrow" style="color:var(--accent-blush)">Hobby — 読書</p>
+        <h1>📚 <em>Books</em></h1>
+        <p class="subtitle">本を読むたびに、世界が少し広くなる</p>
+      </div>
+    </div>
+
+    <div class="article-body">
+      <p class="article-lead">"A reader lives a thousand lives before he dies. The man who never reads lives only one." — George R.R. Martin</p>
+      <p class="article-text">
+        本を読むことは呼吸をすることと同じくらい、当たり前の習慣になっています。小説、エッセイ、歴史、哲学——ジャンルを問わず読みますが、特に好きなのは「一人の人間の内側を深く掘り下げた」作品です。
+      </p>
+      <img class="article-photo" src="https://images.unsplash.com/photo-1481627834876-b7833e8f5570?w=1200&q=80" alt="Library" loading="lazy" />
+      <p class="article-photo-caption">大好きな本棚の前で。本の背表紙を見ているだけで幸せです。</p>
+
+      <div class="pull-quote">
+        <p>「本は、会ったことのない人と会話できる唯一の方法だと思っています。」</p>
+      </div>
+
+      <p class="article-text">
+        好きな作家は<strong>村上春樹、カズオ・イシグロ、ガルシア・マルケス</strong>。それぞれまったく違う文体と世界観を持ちながら、どこかで「人間の孤独」という共通のテーマを探求しているように思います。
+      </p>
+      <p class="article-text">
+        最近読んで感動したのはカズオ・イシグロの「クララとお日さま」。AIの視点から「愛とは何か」を問う物語で、読み終えたあとしばらく気持ちが揺れたままでいました。
+      </p>
+    </div>
+
+    <div class="posts-grid">
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1512820790803-83ca734da794?w=600&q=80" alt="Novel" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--accent-blush)">Books</p>
+          <p class="post-card-title">カズオ・イシグロ「クララとお日さま」感想</p>
+          <p class="post-card-desc">ノーベル賞作家が描くAIの目線。愛と献身と、人間であることの意味。</p>
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1456513080510-7bf3a84b82f8?w=600&q=80" alt="Reading" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--accent-blush)">Books</p>
+          <p class="post-card-title">2025年上半期 読んだ本まとめ</p>
+          <p class="post-card-desc">小説8冊、エッセイ4冊、実用書3冊。それぞれ一言レビュー付きで紹介。</p>
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1524995997946-a1c2e315a42f?w=600&q=80" alt="Bookstore" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--accent-blush)">Books</p>
+          <p class="post-card-title">旅先の本屋で出会った一冊</p>
+          <p class="post-card-desc">知らない街の本屋を訪ねることが好き。そこにしかない出会いがある。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!--  MOVIES PAGE                               -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="page" id="page-movies">
+    <div class="page-header">
+      <div class="page-header-bg">
+        <img src="https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?w=1600&q=80" alt="Cinema" loading="lazy" />
+      </div>
+      <div class="page-header-overlay"></div>
+      <div class="page-header-content">
+        <p class="eyebrow" style="color:var(--accent-plum)">Hobby — 映画鑑賞</p>
+        <h1>🎬 <em>Movies</em></h1>
+        <p class="subtitle">2時間で別の人生を生きる贅沢</p>
+      </div>
+    </div>
+
+    <div class="article-body">
+      <p class="article-lead">"Cinema is a mirror by which we often see ourselves." — Martin Scorsese</p>
+      <p class="article-text">
+        映画が好きです。特に「答えを出さない映画」が好き。見終わったあとに何かを考え続けていられる映画——そういうものに出会ったとき、映画を見てよかったと思います。
+      </p>
+      <img class="article-photo" src="https://images.unsplash.com/photo-1524985069026-dd778a71c7b4?w=1200&q=80" alt="Movie theater" loading="lazy" />
+      <p class="article-photo-caption">映画館の暗闇。非日常への入り口。</p>
+
+      <div class="pull-quote">
+        <p>「良い映画は、見ているあいだだけでなく、見た後も長く続きます。」</p>
+      </div>
+
+      <p class="article-text">
+        好きな監督は<strong>黒澤明、ウォン・カーウァイ、ポール・トーマス・アンダーソン</strong>。それぞれ映像言語がまったく違うのに、どの作品も「時間」の使い方が独特で、見終わったあとに深呼吸したくなります。
+      </p>
+      <p class="article-text">
+        最近見て衝撃を受けたのはウォン・カーウァイの「花様年華」。言葉少なく、視線と音楽と映像だけで語られる恋愛の儚さ——字幕なしで全部わかる映画があるとしたら、これかもしれません。
+      </p>
+    </div>
+
+    <div class="posts-grid">
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=600&q=80" alt="Film" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--accent-plum)">Movies</p>
+          <p class="post-card-title">「花様年華」——映像の詩</p>
+          <p class="post-card-desc">ウォン・カーウァイの傑作。言葉より多くを語る映像と音楽について。</p>
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1460723237483-7a6dc9d0b212?w=600&q=80" alt="Classic film" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--accent-plum)">Movies</p>
+          <p class="post-card-title">黒澤明を改めて観る</p>
+          <p class="post-card-desc">「七人の侍」「羅生門」「生きる」。古びることのない人間ドラマの力。</p>
+        </div>
+      </div>
+      <div class="post-card">
+        <div class="post-card-img"><img src="https://images.unsplash.com/photo-1435224668334-0f82ec57b605?w=600&q=80" alt="Movie night" loading="lazy" /></div>
+        <div class="post-card-body">
+          <p class="post-card-tag" style="color:var(--accent-plum)">Movies</p>
+          <p class="post-card-title">2025年上半期 映画ベスト5</p>
+          <p class="post-card-desc">今年見た中で特に印象に残った5作品。ジャンルも国籍もバラバラの選盤。</p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══════════════════════════════════════════ -->
+  <!--  ENGLISH LESSON PAGE                       -->
+  <!-- ══════════════════════════════════════════ -->
+  <div class="page english-page" id="page-english">
+
+    <div class="english-hero">
+      <div class="english-hero-left">
+        <p class="eyebrow">English Conversation Lesson</p>
+        <h1>英会話、<br><em>始めませんか。</em></h1>
+        <p class="subtitle">一緒に話せる英語を身につけましょう</p>
+        <p>
+          はじめまして。英会話レッスンを行っています。<strong style="color:var(--cream)">北海道での対面</strong>、または<strong style="color:var(--cream)">オンライン（Zoom等）</strong>でのレッスンが可能です。旅行英語から日常会話、ビジネス英語まで、あなたの目標に合わせた内容でお手伝いします。<br><br>英語が苦手な方、長年勉強しているのに話せない方、大歓迎です。「楽しく話す」ことを大切にしたレッスンを心がけています。
+        </p>
+        <button class="btn-gold" onclick="document.getElementById('contact-form').scrollIntoView({behavior:'smooth'})">
+          無料体験レッスンを申し込む →
+        </button>
+      </div>
+      <div class="english-hero-right">
+        <img src="https://images.unsplash.com/photo-1434030216411-0b793f4b6f72?w=1200&q=80" alt="English lesson" loading="lazy" />
+      </div>
+    </div>
+
+    <!-- Stats -->
+    <div class="stats-row">
+      <div class="stat-item">
+        <div class="stat-number">5+</div>
+        <div class="stat-label">年間の指導経験</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">100%</div>
+        <div class="stat-label">会話重視のレッスン</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">1対1</div>
+        <div class="stat-label">マンツーマン指導</div>
+      </div>
+      <div class="stat-item">
+        <div class="stat-number">初回</div>
+        <div class="stat-label">体験レッスン無料</div>
+      </div>
+    </div>
+
+    <!-- Courses -->
+    <div class="courses-section">
+      <p class="section-label" style="color:var(--accent-blue)">Lesson Plans</p>
+      <h2 class="section-heading">レッスンコース</h2>
+      <div class="course-grid">
+        <div class="course-card blue fade-up">
+          <div class="course-icon">✈️</div>
+          <div class="course-title">Travel English</div>
+          <div class="course-subtitle">旅行英会話コース</div>
+          <ul class="course-features">
+            <li>空港・ホテルでの英語</li>
+            <li>レストラン・ショッピング</li>
+            <li>道案内・交通機関</li>
+            <li>トラブル対応フレーズ</li>
+          </ul>
+          <div class="course-price">¥3,000</div>
+          <div class="course-price-note">/ 60分（月4回）</div>
+          <button class="btn-gold" onclick="document.getElementById('contact-form').scrollIntoView({behavior:'smooth'})">申し込む</button>
+        </div>
+        <div class="course-card sage fade-up">
+          <div class="course-icon">💬</div>
+          <div class="course-title">Daily Conversation</div>
+          <div class="course-subtitle">日常英会話コース</div>
+          <ul class="course-features">
+            <li>自己紹介・挨拶</li>
+            <li>趣味・仕事の話し方</li>
+            <li>ニュース・時事英語</li>
+            <li>SNS・メール英語</li>
+          </ul>
+          <div class="course-price">¥3,500</div>
+          <div class="course-price-note">/ 60分（月4回）</div>
+          <button class="btn-gold" onclick="document.getElementById('contact-form').scrollIntoView({behavior:'smooth'})">申し込む</button>
+        </div>
+        <div class="course-card gold fade-up">
+          <div class="course-icon">💼</div>
+          <div class="course-title">Business English</div>
+          <div class="course-subtitle">ビジネス英会話コース</div>
+          <ul class="course-features">
+            <li>会議・プレゼン英語</li>
+            <li>メール・報告書作成</li>
+            <li>交渉・接待英語</li>
+            <li>英語面接対策</li>
+          </ul>
+          <div class="course-price">¥4,500</div>
+          <div class="course-price-note">/ 60分（月4回）</div>
+          <button class="btn-gold" onclick="document.getElementById('contact-form').scrollIntoView({behavior:'smooth'})">申し込む</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- About & Contact -->
+    <div class="about-section">
+      <div class="about-portrait">
+        <div class="about-portrait-placeholder">👤</div>
+      </div>
+      <div class="about-text">
+        <p class="eyebrow section-label">About the Teacher</p>
+        <h2>講師について</h2>
+        <p>北海道在住。英語学習歴20年以上。ピアノ・クラシック音楽・旅行・温泉・日本酒・読書・映画など、多彩な趣味を英語で語れることが喜びです。</p>
+        <p>英語は「勉強するもの」ではなく「使うもの」だと思っています。文法の完璧さより、伝えようとする気持ちと度胸を大切にしたレッスンを行います。</p>
+        <p>レッスンは楽しく、フレンドリーに。緊張せずに話せる雰囲気を大切にしています。初回は無料体験レッスンを行っていますので、まずはお気軽にご連絡ください。</p>
+        <div style="display:flex;flex-wrap:wrap;gap:10px;margin-top:8px;">
+          <span style="background:rgba(123,179,212,0.15);border:1px solid rgba(123,179,212,0.3);color:var(--accent-blue);padding:6px 16px;font-size:12px;font-family:var(--font-ja);">初心者歓迎</span>
+          <span style="background:rgba(123,179,212,0.15);border:1px solid rgba(123,179,212,0.3);color:var(--accent-blue);padding:6px 16px;font-size:12px;font-family:var(--font-ja);">オンライン対応</span>
+          <span style="background:rgba(123,179,212,0.15);border:1px solid rgba(123,179,212,0.3);color:var(--accent-blue);padding:6px 16px;font-size:12px;font-family:var(--font-ja);">マンツーマン</span>
+          <span style="background:rgba(123,179,212,0.15);border:1px solid rgba(123,179,212,0.3);color:var(--accent-blue);padding:6px 16px;font-size:12px;font-family:var(--font-ja);">体験無料</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Contact Form -->
+    <div class="contact-section" id="contact-form">
+      <div class="contact-left">
+        <p class="section-label" style="color:var(--accent-blue)">Contact</p>
+        <h2>お問い合わせ・<br>体験レッスン申込</h2>
+        <p>ご質問やレッスンのご相談はお気軽にどうぞ。初回体験レッスン（60分）は無料で行っています。通常2営業日以内にご返信します。</p>
+        <div class="contact-info-item"><span>📍</span> 北海道（対面またはオンライン）</div>
+        <div class="contact-info-item"><span>💻</span> Zoom / Google Meet 対応</div>
+        <div class="contact-info-item"><span>🕐</span> 平日・土日 応相談</div>
+        <div class="contact-info-item"><span>🎁</span> 初回体験レッスン 無料</div>
+      </div>
+      <div class="contact-right">
+        <div class="form-group">
+          <label>お名前 *</label>
+          <input type="text" placeholder="山田 太郎" />
+        </div>
+        <div class="form-group">
+          <label>メールアドレス *</label>
+          <input type="email" placeholder="example@email.com" />
+        </div>
+        <div class="form-group">
+          <label>ご希望のコース</label>
+          <select>
+            <option value="">選択してください</option>
+            <option>Travel English（旅行英会話）</option>
+            <option>Daily Conversation（日常英会話）</option>
+            <option>Business English（ビジネス英語）</option>
+            <option>その他・相談したい</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>レッスン形式</label>
+          <select>
+            <option value="">選択してください</option>
+            <option>オンライン（Zoom等）</option>
+            <option>対面（北海道内）</option>
+            <option>どちらでも可</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label>現在の英語レベル・メッセージ</label>
+          <textarea placeholder="英語は初心者です。旅行で使える英語を学びたいです。など、お気軽にどうぞ。"></textarea>
+        </div>
+        <button class="btn-gold" style="width:100%;justify-content:center;" onclick="alert('お問い合わせありがとうございます！2営業日以内にご返信します。')">
+          送信する →
+        </button>
+      </div>
+    </div>
+
+    <footer>
+      <div>
+        <span class="footer-logo">My World</span>
+        <p>英会話レッスン・趣味ブログ<br>北海道在住｜ピアノ・音楽・旅・温泉・日本酒・読書・映画</p>
+      </div>
+      <div class="footer-right">
+        <div class="footer-nav">
+          <button onclick="showPage('home')">Home</button>
+          <button onclick="showPage('piano')">Piano</button>
+          <button onclick="showPage('travel')">Travel</button>
+          <button onclick="showPage('english')">English Lesson</button>
+        </div>
+        <div class="footer-copy">© 2025 My World Blog. All rights reserved.</div>
+      </div>
+    </footer>
+  </div>
 
   <script>
-    // Fade-in observer
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry, i) => {
-        if (entry.isIntersecting) {
-          setTimeout(() => {
-            entry.target.classList.add('visible');
-          }, entry.target.dataset.delay || 0);
-          observer.unobserve(entry.target);
+    // ─── PAGE NAVIGATION ──────────────────────
+    function showPage(pageId) {
+      document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+
+      const page = document.getElementById('page-' + pageId);
+      if (page) {
+        page.classList.add('active');
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        if (btn.textContent.toLowerCase().includes(pageId) ||
+            (pageId === 'home' && btn.textContent === 'Home') ||
+            (pageId === 'english' && btn.textContent.includes('English'))) {
+          btn.classList.add('active');
         }
       });
-    }, { threshold: 0.12 });
 
-    document.querySelectorAll('.fade-in').forEach((el, i) => {
-      el.dataset.delay = (i % 4) * 80;
-      observer.observe(el);
-    });
+      // Trigger animations for newly shown page
+      setTimeout(initAnimations, 100);
+    }
 
-    // Category switching
-    document.querySelectorAll('.category-item').forEach(btn => {
-      btn.addEventListener('click', () => {
-        document.querySelectorAll('.category-item').forEach(b => b.classList.remove('active'));
-        btn.classList.add('active');
+    // ─── MOBILE NAV ───────────────────────────
+    function toggleMobileNav() {
+      const nav = document.getElementById('main-nav');
+      if (nav.style.display === 'flex') {
+        nav.style.display = '';
+      } else {
+        nav.style.cssText = 'display:flex;flex-direction:column;position:fixed;top:60px;left:0;right:0;background:rgba(14,13,11,0.97);padding:20px;gap:8px;z-index:199;border-bottom:1px solid rgba(255,255,255,0.1);backdrop-filter:blur(16px);';
+      }
+    }
+
+    // ─── SCROLL ANIMATIONS ────────────────────
+    function initAnimations() {
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach((entry, i) => {
+          if (entry.isIntersecting) {
+            setTimeout(() => entry.target.classList.add('in'), i * 80);
+            observer.unobserve(entry.target);
+          }
+        });
+      }, { threshold: 0.1 });
+
+      document.querySelectorAll('.page.active .fade-up:not(.in)').forEach(el => {
+        observer.observe(el);
       });
-    });
+    }
 
-    // Add to cart
-    document.querySelectorAll('.product-add').forEach(btn => {
-      btn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        const countEl = document.querySelector('.cart-count');
-        countEl.textContent = parseInt(countEl.textContent) + 1;
-        btn.innerHTML = `<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>`;
-        setTimeout(() => {
-          btn.innerHTML = `<svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg>`;
-        }, 1200);
+    // ─── INIT ──────────────────────────────────
+    window.addEventListener('load', () => {
+      initAnimations();
+
+      // Hero tag buttons also navigate
+      document.querySelectorAll('.hero-tag').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const page = btn.getAttribute('onclick').match(/'(\w+)'/)?.[1];
+          if (page) showPage(page);
+        });
       });
     });
   </script>
